@@ -58,7 +58,7 @@ class deLoom_Hypnos{
          * @param use_custom_time Use a specific time set by the user that is different than the compile time
          * @param useSD Whether or not SD card functionality should be enabled
          */
-        Loom_Hypnos(Manager& man, bool use_custom_time = true, bool useSD = true);
+        Loom_Hypnos(Manager& man, bool use_custom_time = true, bool useSD = false);
 
         /**
          *  Cleanup any dynamically allocated pointers
