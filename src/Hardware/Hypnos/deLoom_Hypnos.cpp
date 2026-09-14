@@ -34,7 +34,7 @@ void deLoom_Hypnos::package(){
     JsonObject json = manInst->getDocument().createNestedObject("timestamp");
     char timeStr[21];
 
-    timeUtc = getCurrentTime();
+    timeUtc = RTC_DS.now();
 
     dateTime_toString(timeUtc, timeStr);
     json["time_utc"] = timeStr;
@@ -261,23 +261,12 @@ void deLoom_Hypnos::initializeRTC(){
     // We successfully started the RTC
     LOG(F("DS3231 Real-Time Clock Initialized Successfully!"));
     RTC_initialized = true;
-    DateTime t = getCurrentTime();
+    DateTime t = RTC_DS.now();
     char tbuf[21];
     dateTime_toString(t, tbuf);
     snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
     LOG(output);
     FUNCTION_END
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-DateTime deLoom_Hypnos::getCurrentTime(){
-    if(RTC_initialized)
-        return RTC_DS.now();
-    else{
-        LOG(F("Attempted to pull time when RTC was not previously initialized! Returned default datetime"));
-        return DateTime();
-    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -364,7 +353,7 @@ void deLoom_Hypnos::set_custom_time(){
     RTC_initialized = true;
 
     // Output
-    DateTime t = getCurrentTime();
+    DateTime t = RTC_DS.now();
     char tbuf[21];
     dateTime_toString(t, tbuf);
     snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
@@ -553,7 +542,7 @@ TimeSpan deLoom_Hypnos::getConfigFromSD(const char* fileName){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 bool Loom_Hypnos::logToSD() {
     FUNCTION_START;
-    sdMan->log(getCurrentTime());
+    sdMan->log(RTC_DS.now());
     FUNCTION_END;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
