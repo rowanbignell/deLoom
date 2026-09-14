@@ -235,7 +235,6 @@ void deLoom_Hypnos::wakeup(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::initializeRTC(){
-    FUNCTION_START;
     char output[OUTPUT_SIZE];
     LOG("Initializing DS3231....");
 
@@ -245,15 +244,11 @@ void deLoom_Hypnos::initializeRTC(){
         return;
     }
 
-    // This may end up causing a problem in practice - what if RTC loses power in field? Shouldn't happen with coin cell batt backup
-	if (RTC_DS.lostPower()) {
-		WARNING(F("RTC lost power, let's set the time!"));
 
-        // If we want to set a custom time
-        if(Serial){
-            set_custom_time();
-        }
-	}
+    // If we want to set a custom time
+    if(Serial){
+        set_custom_time();
+    }
 
 	// Clear any pending alarms
 	RTC_DS.clearAlarm(1);
@@ -270,22 +265,6 @@ void deLoom_Hypnos::initializeRTC(){
     dateTime_toString(t, tbuf);
     snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
     LOG(output);
-    FUNCTION_END;
-
-
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-bool deLoom_Hypnos::isDaylightSavings(){
-    // Timezones that observe daylight savings
-    if(timezone == AST || timezone == EST || timezone == CST || timezone == AST || timezone == PST || timezone == AKST){
-        int currMonth = getCurrentTime().month();
-
-        // If we are in the months where daylight savings is in affect
-        return (currMonth >= 3 && currMonth < 11);
-    }
-    return false;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -297,36 +276,6 @@ DateTime deLoom_Hypnos::getCurrentTime(){
         LOG(F("Attempted to pull time when RTC was not previously initialized! Returned default datetime"));
         return DateTime();
     }
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-bool deLoom_Hypnos::networkTimeUpdate(){
-    FUNCTION_START;
-    if(networkComponent != nullptr && networkComponent->isConnected()){
-        char output[OUTPUT_SIZE];
-
-        /* Try twice to set the time if it works break out if not we just og again*/
-        for(int i = 0; i < 2; i++){
-            LOG("Attempting to set RTC time to the current network time...");
-
-            // Attempt to retrieve the current time from our network component
-            if(networkComponent->getNetworkTimeUtc(&timeUtc)){
-                RTC_DS.adjust(timeUtc);
-                DateTime t = getCurrentTime();
-                char tbuf[21];
-                dateTime_toString(t, tbuf);
-                snprintf(output, OUTPUT_SIZE, "Network time successfully set to: %s", tbuf);
-                LOG(output);
-                break;
-            }else{
-                ERROR("Failed to get network time! Time has not been set. Retrying...");
-            }
-        }
-    }else{
-        ERROR("Network component not set in hypnos or component wasn't connected to the internet.");
-    }
-    FUNCTION_END;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
