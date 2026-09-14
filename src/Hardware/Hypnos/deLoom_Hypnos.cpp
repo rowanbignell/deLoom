@@ -235,6 +235,7 @@ void deLoom_Hypnos::wakeup(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::initializeRTC(){
+    FUNCTION_START
     char output[OUTPUT_SIZE];
     LOG("Initializing DS3231....");
 
@@ -265,6 +266,7 @@ void deLoom_Hypnos::initializeRTC(){
     dateTime_toString(t, tbuf);
     snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
     LOG(output);
+    FUNCTION_END
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -392,7 +394,7 @@ void Loom_Hypnos::setInterruptDuration(const TimeSpan duration){
 /* Sleep Functionality */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::sleep(bool waitForSerial){
+void deLoom_Hypnos::sleep(bool waitForSerial){
     bool hasAlarmTriggered = false;
 
     // Try to power down the active modules
@@ -440,7 +442,7 @@ void Loom_Hypnos::sleep(bool waitForSerial){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::pre_sleep(){
+void deLoom_Hypnos::pre_sleep(){
     bool disable5 = is5VDisabled(DEVICE_STATE::ENTERING_SLEEP);
     bool disable33 = is3VDisabled(DEVICE_STATE::ENTERING_SLEEP);
     char output[OUTPUT_SIZE];
@@ -459,7 +461,7 @@ void Loom_Hypnos::pre_sleep(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::post_sleep(bool waitForSerial){
+void deLoom_Hypnos::post_sleep(bool waitForSerial){
     // Enable the Watchdog timer when waking up
     TIMER_ENABLE;
     Watchdog.reset();
@@ -503,7 +505,7 @@ void Loom_Hypnos::post_sleep(bool waitForSerial){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-TimeSpan Loom_Hypnos::getConfigFromSD(const char* fileName){
+TimeSpan deLoom_Hypnos::getConfigFromSD(const char* fileName){
     FUNCTION_START;
     // Doc to store the JSON data from the SD card in
     StaticJsonDocument<OUTPUT_SIZE> doc;
