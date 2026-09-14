@@ -34,52 +34,6 @@ enum DEVICE_STATE{
     EXITING_SLEEP
 };
 
-/**
- * Tracks the hypnos version and matches the version with the correct chip select pin
- */
-enum HYPNOS_VERSION{
-    V3_2 = 10,
-    V3_3 = 11,
-    ADALOGGER = 4
-};
-
-/**
- * Time zone abbreviations that map to the hour offset from UTC
- */
-enum TIME_ZONE{
-    WAT = -1,
-    AT = -2,
-    AST = -4,
-    EST = -5,
-    CST = -6,
-    MST = -7,
-    PST = -8,
-    AKST = -9,
-    HST = -9,
-    SST = -11,
-    GMT = 0,
-    BST = 1,
-    CET = 1,
-    EET = 2,
-    EEST = 3,
-    BRT = 3,
-    ZP4 = 4,
-    ZP5 = 5,
-    ZP6 = 6,
-    ZP7 = 7,
-    AWST = 8,
-    ACST = 10, // Half an hour off so its -9.5
-    AEST = 10
-
-};
-
-/**
- * Type of interrupt to register
- */
-enum HypnosInterruptType{
-    SLEEP,
-    OTHER
-};
 
 // Custom comparator for const char*, used for evaluating timezone name to timezone enum
 struct cmp_str {
@@ -93,19 +47,7 @@ struct cmp_str {
  *
  * @author Will Richards
  */
-class Loom_Hypnos : public Module{
-    protected:
-
-        /* These aren't used with the Hypnos */
-        void measure() override {};
-
-        void initialize() override {};
-
-        void power_up() override {};
-        void power_down() override {};
-
-        // We want to use the package method to add the timestamp to the JSON
-        void package() override;
+class deLoom_Hypnos{
     public:
 
         volatile bool shouldPowerUp = true;
@@ -113,12 +55,10 @@ class Loom_Hypnos : public Module{
         /**
          * Constructs a new Hypnos Instance using the manager to hold information about the device
          * @param man Reference to the manager
-         * @param version The version of the Hypnos in use, this changes which pin is used as and SD chip select
-         * @param timezone The current timezone the clock was set to
          * @param use_custom_time Use a specific time set by the user that is different than the compile time
          * @param useSD Whether or not SD card functionality should be enabled
          */
-        Loom_Hypnos(Manager& man, HYPNOS_VERSION version, TIME_ZONE zone, bool use_custom_time = true, bool useSD = true);
+        Loom_Hypnos(Manager& man, bool use_custom_time = true, bool useSD = true);
 
         /**
          *  Cleanup any dynamically allocated pointers
@@ -166,11 +106,9 @@ class Loom_Hypnos : public Module{
         /**
          * Enables RTC based interrupts using the DS3231 on the Hypnos
          * @param isrFunc function to callback to when the interrupt is triggered
-         * @param interruptPin Defaults to RTC pin on Hypnos can be changed to reflect other interrupts
-         * @param interruptType Type of the interrupt to register (SLEEP or OTHER)
-         * @param triggerState When the interrupt should trigger
+         * @param interruptPin Defaults to RTC pin on Hypnos can be changed to reflect other interrupts         * @param triggerState When the interrupt should trigger
          */
-        bool registerInterrupt(InterruptCallbackFunction isrFunc = nullptr, int interruptPin = 12, HypnosInterruptType interruptType = SLEEP, int triggerState = LOW);
+        bool registerInterrupt(InterruptCallbackFunction isrFunc = nullptr, int interruptPin = 12, int triggerState = LOW);
 
         /**
          * Called when the user wants to wake the Hypnos back out of the sleep state
