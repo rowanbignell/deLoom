@@ -58,12 +58,12 @@ class deLoom_Hypnos{
          * @param use_custom_time Use a specific time set by the user that is different than the compile time
          * @param useSD Whether or not SD card functionality should be enabled
          */
-        Loom_Hypnos(Manager& man, bool use_custom_time = true, bool useSD = false);
+        deLoom_Hypnos(Manager& man, bool use_custom_time = true, bool useSD = false);
 
         /**
          *  Cleanup any dynamically allocated pointers
          */
-        ~Loom_Hypnos();
+        ~deLoom_Hypnos();
 
         /* Power Control Functionality */
 
@@ -181,9 +181,6 @@ class deLoom_Hypnos{
         /* Set the current RTC time to the time retrieved from the network */
         bool networkTimeUpdate();
 
-        /* Whether or not the current timezone is observing daylight savings */
-        bool isDaylightSavings();
-
         /**
          * Set an alternative name to log data to
          */
@@ -239,14 +236,7 @@ class deLoom_Hypnos{
 
         void initializeRTC();                                                               // Initialize RTC
 
-        void createTimezoneMap();                                                           // Map Timezone Strings to Timezone enum
-        std::map<const char*, TIME_ZONE, cmp_str> timezoneMap;                              // String to Timezone enum, use custom compare to ensure that strings are compared correctly
-
-        DateTime getLocalTime(DateTime time);                                               // Convert a given UTC time to local time
-        TIME_ZONE timezone;                                                                 // Timezone the RTC was set to
-
         DateTime timeUtc;                                                                   // UTC time
-        DateTime timeLocal;                                                                 // Local time
 
         DateTime timeAlarm;                                                                 // Time the alarm has been set for
 
