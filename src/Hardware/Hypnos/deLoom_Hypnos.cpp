@@ -23,33 +23,28 @@ deLoom_Hypnos::deLoom_Hypnos(Manager& man, bool use_custom_time, bool useSD) : M
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-Loom_Hypnos::~Loom_Hypnos(){
+deLoom_Hypnos::~deLoom_Hypnos(){
     if(sdMan != nullptr)
         delete sdMan;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::package(){
+void deLoom_Hypnos::package(){
     JsonObject json = manInst->getDocument().createNestedObject("timestamp");
     char timeStr[21];
-    char localStr[21];
 
     timeUtc = getCurrentTime();
-    timeLocal = getLocalTime(timeUtc);
 
     dateTime_toString(timeUtc, timeStr);
     json["time_utc"] = timeStr;
-
-    dateTime_toString(timeLocal, localStr, true);
-    json["time_local"] = localStr;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /* Power Rail Control Functionality */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::enable(bool enable33, bool enable5){
+void deLoom_Hypnos::enable(bool enable33, bool enable5){
 
     // Enable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (enable33) ? LOW : HIGH);
@@ -74,7 +69,7 @@ void Loom_Hypnos::enable(bool enable33, bool enable5){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::disable(bool disable33, bool disable5){
+void deLoom_Hypnos::disable(bool disable33, bool disable5){
     // Disable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (disable33) ? HIGH : LOW);
     digitalWrite(6, (disable5) ? LOW : HIGH);
@@ -92,7 +87,7 @@ void Loom_Hypnos::disable(bool disable33, bool disable5){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::is3VDisabled(DEVICE_STATE deviceState){
+bool deLoom_Hypnos::is3VDisabled(DEVICE_STATE deviceState){
    
     switch (deviceState)
     {
@@ -130,7 +125,7 @@ bool Loom_Hypnos::is3VDisabled(DEVICE_STATE deviceState){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::is5VDisabled(DEVICE_STATE deviceState){
+bool deLoom_Hypnos::is5VDisabled(DEVICE_STATE deviceState){
     switch (deviceState)
     {
         case ENTERING_SLEEP:
@@ -169,7 +164,7 @@ bool Loom_Hypnos::is5VDisabled(DEVICE_STATE deviceState){
 /* Interrupt Functionality */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int interruptPin, HypnosInterruptType interruptType, int triggerState){
+bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int interruptPin, HypnosInterruptType interruptType, int triggerState){
     FUNCTION_START;
     pinMode(interruptPin, INPUT_PULLUP);  //  Set interrupt pin input mode
     LOG(F("Registering interrupt..."));
@@ -208,7 +203,7 @@ bool Loom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int inter
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::reattachRTCInterrupt(int interruptPin){
+bool deLoom_Hypnos::reattachRTCInterrupt(int interruptPin){
     FUNCTION_START;
     if(std::get<2>(pinToInterrupt[interruptPin]) != SLEEP){
 
@@ -233,13 +228,13 @@ bool Loom_Hypnos::reattachRTCInterrupt(int interruptPin){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::wakeup(){
+void deLoom_Hypnos::wakeup(){
     detachInterrupt(pinToInterrupt.begin()->first);     // Detach the interrupt so it doesn't trigger again
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::initializeRTC(){
+void deLoom_Hypnos::initializeRTC(){
     FUNCTION_START;
     char output[OUTPUT_SIZE];
     LOG("Initializing DS3231....");
@@ -282,20 +277,7 @@ void Loom_Hypnos::initializeRTC(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-DateTime Loom_Hypnos::getLocalTime(DateTime timeUtc){
-    // Add 30 minutes from this zone
-    if(timezone == TIME_ZONE::ACST)
-        return timeUtc + TimeSpan(0, timezone, 30, 0);
-    if(isDaylightSavings()){
-        return timeUtc + TimeSpan(0, (timezone)+1, 0, 0);
-    }else{
-        return timeUtc + TimeSpan(0, (timezone), 0, 0);
-    }
-}
-/////////////////////////////////////// ///////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::isDaylightSavings(){
+bool deLoom_Hypnos::isDaylightSavings(){
     // Timezones that observe daylight savings
     if(timezone == AST || timezone == EST || timezone == CST || timezone == AST || timezone == PST || timezone == AKST){
         int currMonth = getCurrentTime().month();
@@ -308,7 +290,7 @@ bool Loom_Hypnos::isDaylightSavings(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-DateTime Loom_Hypnos::getCurrentTime(){
+DateTime deLoom_Hypnos::getCurrentTime(){
     if(RTC_initialized)
         return RTC_DS.now();
     else{
@@ -319,7 +301,7 @@ DateTime Loom_Hypnos::getCurrentTime(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::networkTimeUpdate(){
+bool deLoom_Hypnos::networkTimeUpdate(){
     FUNCTION_START;
     if(networkComponent != nullptr && networkComponent->isConnected()){
         char output[OUTPUT_SIZE];
@@ -349,20 +331,15 @@ bool Loom_Hypnos::networkTimeUpdate(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::dateTime_toString(DateTime time, char array[21], bool isLocal){
-
+void deLoom_Hypnos::dateTime_toString(DateTime time, char array[21]){
     // Formatted as: YYYY-MM-DDTHH:MM:SSZ
-    if(isLocal){
-        snprintf_P(array, 21, PSTR("%04u-%02u-%02uT%02u:%02u:%02u"), time.year(), time.month(), time.day(), time.hour(), time.minute(), time.second());
-    }else{
-        snprintf_P(array, 21, PSTR("%04u-%02u-%02uT%02u:%02u:%02uZ"), time.year(), time.month(), time.day(), time.hour(), time.minute(), time.second());
-    }
+    snprintf_P(array, 21, PSTR("%04u-%02u-%02uT%02u:%02u:%02uZ"), time.year(), time.month(), time.day(), time.hour(), time.minute(), time.second());
    
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Loom_Hypnos::set_custom_time(){
+void deLoom_Hypnos::set_custom_time(){
     FUNCTION_START;
 
    	// initialized variable for user input
@@ -374,7 +351,7 @@ void Loom_Hypnos::set_custom_time(){
 	String computer_sec = "";
     char output[OUTPUT_SIZE];
 
-	// Let the user know that they should enter local time
+	// Let the user know that they should NOT enter local time
 	LOG(F("Please use UTC time, not local!"));
 
 	// Entering the year
@@ -453,12 +430,11 @@ void Loom_Hypnos::setInterruptDuration(const TimeSpan duration){
     RTC_DS.setAlarm1(timeAlarm, DS3231_A1_Date);
 
     // Print the time that the next interrupt is set to trigger
-    DateTime t = getLocalTime(RTC_DS.now());
+    DateTime t = RTC_DS.now();
     char tbuf[21];
     dateTime_toString(t, tbuf);
-    LOGF("Current Time (Local): %s", tbuf, true);
-    t = getLocalTime(timeAlarm);
-    dateTime_toString(t, tbuf);
+    LOGF("Current Time (UTC): %s", tbuf, true);
+    dateTime_toString(timeAlarm, tbuf);
     LOGF("Next interrupt alarm set for: %s", tbuf, true);
     FUNCTION_END;
 }
