@@ -145,7 +145,7 @@ class deLoom_Hypnos{
          * @param time The current time as a DateTime object
          * @param array The buffer to write the string to (size 21)
         */
-        void dateTime_toString(DateTime time, char array[21], bool isLocal = false);
+        void dateTime_toString(DateTime time, char array[21]);
 
         /**
          * Set a custom time on startup for the RTC to use
