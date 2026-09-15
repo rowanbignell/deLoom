@@ -97,7 +97,6 @@ void Manager::power_up(){
         }
         else{
             Serial.println(F("A module isn't initialized."))
-
         }
     }
 }
@@ -110,7 +109,6 @@ void Manager::power_down(){
             modules[i].second->power_down();
         else{
             Serial.println(F("A module isn't initialized."))
-
         }
     }
 }
@@ -119,7 +117,6 @@ void Manager::power_down(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Manager::display_data(){
     char jsonStr[MAX_JSON_SIZE];
-    FUNCTION_START;
     if(!doc.isNull()){
 
         // Display data for modules that support it
@@ -128,14 +125,12 @@ void Manager::display_data(){
         }
 
         serializeJsonPretty(doc, jsonStr, MAX_JSON_SIZE);
-        LOG(F("Data Json: \n"));
-        LOG_LONG(jsonStr);
+        Serial.println(F("Data Json: \n"));
+        Serial.println(jsonStr);
     }
     else{
-        LOG(F("JSON Document is Null there is no data to display"));
+        Serial.println(F("JSON Document is Null there is no data to display"));
     }
-    
-    FUNCTION_END;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
