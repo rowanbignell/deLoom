@@ -24,39 +24,23 @@ void Manager::beginSerial(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void Manager::measure() {
-    FUNCTION_START;
-    
-    char noInitLog[50];
-    if(hasInitialized){
+void Manager::measure() {    
        LOG(F("** Measuring **"));
        for(int i = 0; i < modules.size(); i++){
             if(modules[i].second->moduleInitialized)
                 modules[i].second->measure();
-            else{
-
-                /* Converted warning from printModuleName to logger*/
-                memset(noInitLog, '\0', 50);
-                snprintf(noInitLog, 50, "%s Not initialized!", modules[i].second->getModuleName());
-                WARNING(noInitLog);
+            } else {
+                Serial.println(F("A module isn't initialized."))
             }
-            TIMER_RESET;
-        }
-    }
-    else{
-            ERROR(F("Unable to collect data as the manager and thus all sensors connected to it have not been initialized! Call manager.initialize() to fix this."));
-    }
-    LOG(F("** Measuring Complete **"));
-    FUNCTION_END;
+    Serial.println((F("** Measuring Complete **")));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Manager::package(){
-    FUNCTION_START;
     char noInitLog[50];
 
-    LOG(F("** Packaging **"));
+    Serial.println(F("** Packaging **"));
     
     // Clear the document so that we don't get null characters after too many updates
     doc.clear();
@@ -77,17 +61,13 @@ void Manager::package(){
         if(modules[i].second->moduleInitialized){
             modules[i].second->package();
         } else{
-            /* Converted warning from printModuleName to logger*/
-            memset(noInitLog, '\0', 50);
-            snprintf(noInitLog, 50, "%s Not initialized!", modules[i].second->getModuleName());
-            WARNING(noInitLog);
+            Serial.println(F("A module isn't initialized."))
+
         }
-        TIMER_RESET;
     }
     packetNumber++;
     
-    LOG(F("** Packaging Complete **"));
-    FUNCTION_END;
+    Serial.println(F("** Packaging Complete **"));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -111,48 +91,28 @@ JsonObject Manager::get_data_object(const char* moduleName){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Manager::power_up(){
-    FUNCTION_START;
-    char noInitLog[50];
     for(int i = 0; i < modules.size(); i++){
-        Watchdog.reset();
         if(modules[i].second->moduleInitialized){
-            // If we are about to power up the LTE we should turn off the watchdog
-            if(strcmp(modules[i].second->getModuleName(), "LTE") == 0){
-                Watchdog.disable();
-            }
             modules[i].second->power_up();
         }
         else{
-            /* Converted warning from printModuleName to logger*/
-            memset(noInitLog, '\0', 50);
-            snprintf(noInitLog, 50, "%s Not initialized!", modules[i].second->getModuleName());
-            WARNING(noInitLog);
-        }
-        TIMER_RESET;
-    }
+            Serial.println(F("A module isn't initialized."))
 
-    // If we didn't already disable the timer from finding the LTE we should disable it now
-    Watchdog.disable();
-    FUNCTION_END;
+        }
+    }
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Manager::power_down(){
-    FUNCTION_START;
-    char noInitLog[50];
     for(int i = 0; i < modules.size(); i++){
         if(modules[i].second->moduleInitialized)
             modules[i].second->power_down();
         else{
-            /* Converted warning from printModuleName to logger*/
-            memset(noInitLog, '\0', 50);
-            snprintf(noInitLog, 50, "%s Not initialized!", modules[i].second->getModuleName());
-            WARNING(noInitLog);
+            Serial.println(F("A module isn't initialized."))
+
         }
-        TIMER_RESET;
     }
-    FUNCTION_END;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
