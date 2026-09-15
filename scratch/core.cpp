@@ -9,5 +9,5 @@ void measure(){
 }
 
 void begin_serial(){
-    
+    Serial.begin(BAUD_RATE);
 }

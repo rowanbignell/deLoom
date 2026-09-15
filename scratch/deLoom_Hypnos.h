@@ -29,12 +29,6 @@ void hypnos_init();
 
 void initializeRTC();
 
-
-/**
- * Get the current time from the RTC
- */
-DateTime getCurrentTime();
-
 /**
  * Convert the current time to a ISO 8601 compatible time string
  *
