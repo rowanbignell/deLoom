@@ -304,7 +304,7 @@ void deLoom_Hypnos::sleep(bool waitForSerial){
         hasAlarmTriggered = alarmedTime <= currentTime;
         
         // 50ms delay allows this last message to be sent before the bus disconnects
-        LOG("Entering Standby Sleep...");
+        Serial.println("Entering Standby Sleep...");
         delay(50);
     }
 
@@ -313,17 +313,15 @@ void deLoom_Hypnos::sleep(bool waitForSerial){
         pre_sleep();                                            // Pre-sleep cleanup
         shouldPowerUp = true;
         LowPower.sleep();                                       // Go to sleep and hang
-        Watchdog.enable(WATCHDOG_TIMEOUT);
     }
     // If it has we want to trigger a resample which requires powering the sensors back up
     else{
-        WARNING("Alarm triggered during sample, specified sample duration was too short! Resampling...");
+        Serial.println("Alarm triggered during sample, specified sample duration was too short! Resampling...");
         reattachRTCInterrupt();
         if(shouldPowerUp){
             manInst->power_up();
         }
     }
-    Watchdog.reset();
 
     // If the alarm hadn't triggered last time we want to wake up like normal
     if(!hasAlarmTriggered)
