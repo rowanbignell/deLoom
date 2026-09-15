@@ -1,4 +1,4 @@
-#include "Loom_Manager.h"
+#include "deLoom_Manager.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 Manager::Manager(const char* devName, uint32_t instanceNum) : instanceNumber(instanceNum), doc(MAX_JSON_SIZE) {

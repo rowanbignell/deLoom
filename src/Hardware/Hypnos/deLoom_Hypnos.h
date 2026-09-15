@@ -8,8 +8,7 @@
 
 #include "Arduino.h"
 #include "Module.h"
-#include "Hardware/Loom_Hypnos/SDManager.h"
-#include "Loom_Manager.h"
+#include "deLoom_Manager.h"
 
 // Used to pass along the user defined interrupt callback
 using InterruptCallbackFunction = void (*)();

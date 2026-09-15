@@ -5,9 +5,9 @@
  * MANAGER MUST BE INCLUDED FIRST IN ALL CODE
  */
 
-#include <Loom_Manager.h>
+#include <deLoom_Manager.h>
 
-#include <Hardware/Loom_Hypnos/Loom_Hypnos.h>
+#include <Hardware/Hypnos/deLoom_Hypnos.h>
 
 // Manager to control the device
 Manager manager("Device", 1);
