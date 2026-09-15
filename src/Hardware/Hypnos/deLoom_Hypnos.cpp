@@ -283,7 +283,7 @@ void deLoom_Hypnos::setInterruptDuration(const TimeSpan duration){
 /* Sleep Functionality */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-void deLoom_Hypnos::sleep(bool waitForSerial){
+void deLoom_Hypnos::sleep(uint32_t seconds, bool waitForSerial){
     bool hasAlarmTriggered = false;
 
     // Try to power down the active modules
@@ -310,7 +310,7 @@ void deLoom_Hypnos::sleep(bool waitForSerial){
     if(!hasAlarmTriggered){
         pre_sleep();                                            // Pre-sleep cleanup
         shouldPowerUp = true;
-        LowPower.sleep();                                       // Go to sleep and hang
+        LowPower.sleep(seconds / 1000);                                       // Go to sleep and hang
     }
     // If it has we want to trigger a resample which requires powering the sensors back up
     else{
@@ -350,8 +350,6 @@ void deLoom_Hypnos::pre_sleep(){
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::post_sleep(bool waitForSerial){
     // Enable the Watchdog timer when waking up
-    TIMER_ENABLE;
-    Watchdog.reset();
     
     if(shouldPowerUp){
         USBDevice.attach();
@@ -391,56 +389,3 @@ void deLoom_Hypnos::post_sleep(bool waitForSerial){
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-TimeSpan deLoom_Hypnos::getConfigFromSD(const char* fileName){
-    FUNCTION_START;
-    // Doc to store the JSON data from the SD card in
-    StaticJsonDocument<OUTPUT_SIZE> doc;
-    char output[OUTPUT_SIZE];
-    char* fileRead = sdMan->readFile(fileName);
-    // avoid zero-copy behavior
-    DeserializationError deserialError = deserializeJson(doc, (const char *)fileRead);
-    free(fileRead);
-
-    // Create json object to easily pull data from
-    JsonObject json = doc.as<JsonObject>();
-
-    if(deserialError != DeserializationError::Ok){
-        snprintf(output, OUTPUT_SIZE, "There was an error reading the config from SD: %s, defaulting sampling interval to 20 minutes.", deserialError.c_str());
-        ERROR(output);
-        return TimeSpan(0, 0, 20, 0);
-    }
-    else{
-        LOG(F("Config successfully loaded from SD!"));
-        if(!json["timezone"].isNull()){
-            const char* timezoneStr = json["timezone"].as<const char*>();
-            snprintf(output, OUTPUT_SIZE, "Selected timezone: %s, UTC offset: %i", timezoneStr, (int)timezoneMap[(const char*)timezoneStr]);
-            LOG(output);
-            timezone = timezoneMap[(const char*)timezoneStr];
-        }
-
-        // If the sleep interval key is not supplied we want to set some default
-        if(!json["SleepInterval"].isNull()){
-            // Return the interval as set in the json
-            return TimeSpan(json["SleepInterval"]["days"].as<int>(), json["SleepInterval"]["hours"].as<int>(), json["SleepInterval"]["minutes"].as<int>(), json["SleepInterval"]["seconds"].as<int>());
-        }
-        else{
-            snprintf(output, OUTPUT_SIZE, "There was an error reading the sampling interval from SD, defaulting sampling interval to 20 minutes.");
-            ERROR(output);
-            return TimeSpan(0, 0, 20, 0);
-        }
-    }
-    free(fileRead);
-    FUNCTION_END;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/*** SD Stuff ****/
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-bool Loom_Hypnos::logToSD() {
-    FUNCTION_START;
-    sdMan->log(RTC_DS.now());
-    FUNCTION_END;
-}
-//////////////////////////////////////////////////////////////////////////////////////////////////////
