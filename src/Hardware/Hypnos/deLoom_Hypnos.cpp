@@ -165,25 +165,9 @@ bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int int
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 bool deLoom_Hypnos::reattachRTCInterrupt(int interruptPin){
-    if(std::get<2>(pinToInterrupt[interruptPin]) != SLEEP){
-
-        // If we haven't previously registered the interrupt we need to do this before we can reattach to an interrupt that doesn't exist
-        if(pinToInterrupt.count(interruptPin) <= 0){
-            ERROR(F("Failed to reattach interrupt! Interrupt has not previously been registered..."));
-            FUNCTION_END;
-            return false;
-        }
-
-        attachInterrupt(digitalPinToInterrupt(interruptPin), std::get<0>(pinToInterrupt[interruptPin]), std::get<1>(pinToInterrupt[interruptPin]));
-        attachInterrupt(digitalPinToInterrupt(interruptPin), std::get<0>(pinToInterrupt[interruptPin]), std::get<1>(pinToInterrupt[interruptPin]));
-    }
-    else{
-        LowPower.attachInterruptWakeup(interruptPin, std::get<0>(pinToInterrupt[interruptPin]), std::get<1>(pinToInterrupt[interruptPin]));
-    }
-    LOG(F("Interrupt successfully reattached!"));
-    FUNCTION_END;
+    LowPower.attachInterruptWakeup(interruptPin, std::get<0>(pinToInterrupt[interruptPin]), std::get<1>(pinToInterrupt[interruptPin]));
+    Serial.println(F("Interrupt successfully reattached!"));
     return true;
-
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
