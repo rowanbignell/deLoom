@@ -25,7 +25,7 @@ void Manager::beginSerial(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Manager::measure() {    
-       LOG(F("** Measuring **"));
+       Serial.println(F("** Measuring **"));
        for(int i = 0; i < modules.size(); i++){
             if(modules[i].second->moduleInitialized)
                 modules[i].second->measure();
@@ -38,8 +38,6 @@ void Manager::measure() {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Manager::package(){
-    char noInitLog[50];
-
     Serial.println(F("** Packaging **"));
     
     // Clear the document so that we don't get null characters after too many updates
