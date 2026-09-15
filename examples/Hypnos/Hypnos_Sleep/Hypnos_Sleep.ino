@@ -5,9 +5,8 @@
  * MANAGER MUST BE INCLUDED FIRST IN ALL CODE
  */
 
-#include <deLoom_Manager.h>
-
-#include <Hardware/Hypnos/deLoom_Hypnos.h>
+#include <scratch/core.h>
+#include <scratch/deLoom_Hypnos.h>
 
 
 void setup() {
@@ -16,7 +15,7 @@ void setup() {
   manager.beginSerial();
 
   // Enable the hypnos rails
-  hypnos.enable();
+  hypnos_enable();
 
   // initialize the devices
   //manager.initialize();
