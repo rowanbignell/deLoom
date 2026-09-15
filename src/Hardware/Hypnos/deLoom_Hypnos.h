@@ -44,7 +44,7 @@ struct cmp_str {
  *
  * @author Will Richards
  */
-class deLoom_Hypnos{
+class deLoom_Hypnos: public Module{
     public:
 
         volatile bool shouldPowerUp = true;

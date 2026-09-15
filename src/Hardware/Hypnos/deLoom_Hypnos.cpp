@@ -1,7 +1,7 @@
 #include "deLoom_Hypnos.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-deLoom_Hypnos::deLoom_Hypnos(Manager& man, bool use_custom_time) : Module("Hypnos"), custom_time(use_custom_time)){
+deLoom_Hypnos::deLoom_Hypnos(Manager& man, bool use_custom_time) : Module("Hypnos"), custom_time(use_custom_time){
     manInst = &man;
 
     // Set the pins to write mode
