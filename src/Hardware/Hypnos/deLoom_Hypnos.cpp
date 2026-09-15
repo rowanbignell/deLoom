@@ -9,6 +9,10 @@ void hypnos_init(){
 
 void pre_sleep(){
     Serial.println((F("** Going to Sleep **")));
+
+    //power down the devices
+    power_down();
+
     delay(50);
 
     bool disable5 = is5VDisabled(DEVICE_STATE::ENTERING_SLEEP);
@@ -30,11 +34,13 @@ void post_sleep(){
     hypnos_enable(enable33, enable5); // Checks if the 3.3v or 5v are disabled and re-enables them
 
     Serial.println((F("** Woke Up **")));
+
+    // power on the devices
+    power_up();
+
 }
 
 void sleep(uint32_t seconds, bool waitForSerial){
-    power_down();
-
     pre_sleep();
     shouldPowerUp = false;
 
@@ -46,8 +52,6 @@ void sleep(uint32_t seconds, bool waitForSerial){
     }
 
     post_sleep();  // Wake up
-
-    power_up();
 
     if (waitForSerial){
         while(!Serial);
