@@ -3,12 +3,25 @@
 
 void pre_sleep(){
     Serial.println((F("** Going to Sleep **")));
+    delay(50);
 
+    bool disable5 = is5VDisabled(DEVICE_STATE::ENTERING_SLEEP);
+    bool disable33 = is3VDisabled(DEVICE_STATE::ENTERING_SLEEP);
+
+    // Close the serial connection and detach
+    Serial.end();
+
+    // Disable the power rails
+    disable(disable33, disable5);
 
 }
 
 void post_sleep(){
+    // Check if they are not disabled to see if they should be enabled
+    bool enable5 = !is5VDisabled(DEVICE_STATE::EXITING_SLEEP);
+    bool enable33 = !is3VDisabled(DEVICE_STATE::EXITING_SLEEP);
 
+    enable(enable33, enable5); // Checks if the 3.3v or 5v are disabled and re-enables them
 
     Serial.println((F("** Woke Up **")));
 }
@@ -20,9 +33,19 @@ void sleep(uint32_t seconds, bool waitForSerial){
     shouldPowerUp = false;
 
     LowPower.attachInterruptWakeup(RTC_ALARM_WAKEUP, wakeup, 0);
-    LowPower.sleep(seconds);  // Go to sleep and hang
+    LowPower.sleep(seconds);
 
-    Serial.println((F("** Going to Sleep **")));
+    while (!shouldPowerUp) {
+        LowPower.sleep();
+    }
+
+    post_sleep();  // Wake up
+
+    power_up();
+
+    if (waitForSerial){
+        while(!Serial);
+    }
 }
 
 static void wakeup(){

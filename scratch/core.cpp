@@ -1,5 +1,9 @@
-#include core.h
+#include <core.h>
 
 void power_down(){
+
+}
+
+void measure(){
     
 }
