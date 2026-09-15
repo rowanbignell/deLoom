@@ -75,3 +75,74 @@ void disable(bool disable33, bool disable5){
 void initializeRTC() {
 
 }
+
+bool is3VDisabled(DEVICE_STATE deviceState){
+   
+    switch (deviceState)
+    {
+        case ENTERING_SLEEP:
+            switch (sleepModePowerConfig)
+            {
+                case PR_3V_ON_5V_ON:
+                    return false;
+                case PR_3V_ON_5V_OFF:
+                    return false;
+                case PR_3V_OFF_5V_ON:
+                    return true;
+                case PR_3V_OFF_5V_OFF:
+                    return true;
+            }
+            break;
+        case EXITING_SLEEP:
+            switch (wakeModePowerConfig)
+                {
+                    case PR_3V_ON_5V_ON:
+                        return false;
+                    case PR_3V_ON_5V_OFF:
+                        return false;
+                    case PR_3V_OFF_5V_ON:
+                        return true;
+                    case PR_3V_OFF_5V_OFF:
+                        return true;
+                }
+            break;
+    }
+
+    // We should never make it here but enable the rail if we do
+    return false;
+}
+
+bool is5VDisabled(DEVICE_STATE deviceState){
+    switch (deviceState)
+    {
+        case ENTERING_SLEEP:
+            switch (sleepModePowerConfig)
+            {
+                case PR_3V_ON_5V_ON:
+                    return false;
+                case PR_3V_OFF_5V_ON:
+                    return false;
+                case PR_3V_ON_5V_OFF:
+                    return true;
+                case PR_3V_OFF_5V_OFF:
+                    return true;
+            }
+            break;
+        case EXITING_SLEEP:
+            switch (wakeModePowerConfig)
+                {
+                    case PR_3V_ON_5V_ON:
+                        return false;
+                    case PR_3V_OFF_5V_ON:
+                        return false;
+                    case PR_3V_ON_5V_OFF:
+                        return true;
+                    case PR_3V_OFF_5V_OFF:
+                        return true;
+                }
+            break;
+    }
+
+    // We should never make it here but enable the rail if we do
+    return false;
+}

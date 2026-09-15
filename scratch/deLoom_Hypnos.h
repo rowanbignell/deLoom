@@ -47,6 +47,10 @@ DateTime alarmTime;                                                             
 void pre_sleep();                            // Called just before the hypnos enters sleep, this disconnects the power rails and the serial bus
 void post_sleep();                           // Called just after the hypnos wakes up, this reconnects the power rails and the serial bus
 
+bool is5VDisabled(DEVICE_STATE deviceState);
+bool is3VDisabled(DEVICE_STATE deviceState);
+
+
 /**
  * Handle interrupt when waking from sleep
  */
