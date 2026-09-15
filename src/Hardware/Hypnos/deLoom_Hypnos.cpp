@@ -1,20 +1,13 @@
 #include "deLoom_Hypnos.h"
-#include "Logger.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-deLoom_Hypnos::deLoom_Hypnos(Manager& man, bool use_custom_time, bool useSD) : Module("Hypnos"), custom_time(use_custom_time), sd_chip_select(version), enableSD(useSD){
+deLoom_Hypnos::deLoom_Hypnos(Manager& man, bool use_custom_time) : Module("Hypnos"), custom_time(use_custom_time)){
     manInst = &man;
 
     // Set the pins to write mode
     pinMode(5, OUTPUT);                     // 3.3v power rail
     pinMode(6, OUTPUT);                     // 5v power rail
     pinMode(LED_BUILTIN, OUTPUT);           // Status LED
-
-    // Create the SD Manager if we want to use SD
-    if(useSD){
-        sdMan = new SDManager(manInst, sd_chip_select);
-        Logger::getInstance()->setHypnos(this);
-    }
 
     // Add the Hypnos to the module register
     manInst->registerModule(this);
@@ -23,10 +16,7 @@ deLoom_Hypnos::deLoom_Hypnos(Manager& man, bool use_custom_time, bool useSD) : M
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-deLoom_Hypnos::~deLoom_Hypnos(){
-    if(sdMan != nullptr)
-        delete sdMan;
-}
+deLoom_Hypnos::~deLoom_Hypnos(){}
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,20 +35,10 @@ void deLoom_Hypnos::package(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::enable(bool enable33, bool enable5){
-
     // Enable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (enable33) ? LOW : HIGH);
     digitalWrite(6, (enable5) ? HIGH : LOW);
     digitalWrite(LED_BUILTIN, HIGH);
-
-    if(enableSD){
-        // Enable SPI pins
-        pinMode(23, OUTPUT);
-        pinMode(24, OUTPUT);
-        pinMode(sd_chip_select, OUTPUT);
-
-        sdMan->begin();
-    }
 
     // If the RTC hasn't already been initialized then do so now
     if(!RTC_initialized)
@@ -74,14 +54,6 @@ void deLoom_Hypnos::disable(bool disable33, bool disable5){
     digitalWrite(5, (disable33) ? HIGH : LOW);
     digitalWrite(6, (disable5) ? LOW : HIGH);
     digitalWrite(LED_BUILTIN, LOW);
-
-    if(enableSD){
-        // Disable SPI pins/SD chip select to save power
-        pinMode(23, INPUT);
-        pinMode(24, INPUT);
-        pinMode(sd_chip_select, INPUT);
-    }
-
     manInst->setEnableState(false);
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -280,8 +252,6 @@ void deLoom_Hypnos::dateTime_toString(DateTime time, char array[21]){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::set_custom_time(){
-    FUNCTION_START;
-
    	// initialized variable for user input
 	String computer_year = "";
 	String computer_month = "";
@@ -292,29 +262,29 @@ void deLoom_Hypnos::set_custom_time(){
     char output[OUTPUT_SIZE];
 
 	// Let the user know that they should NOT enter local time
-	LOG(F("Please use UTC time, not local!"));
+	Serial.println(F("Please use UTC time, not local!"));
 
 	// Entering the year
-	LOG(F("Enter the Year (Four digits, e.g. 2020)"));
+	Serial.println(F("Enter the Year (Four digits, e.g. 2020)"));
 
 	while(computer_year == ""){
 		computer_year = Serial.readStringUntil('\n');
 	}
 
     snprintf(output, OUTPUT_SIZE, "Year Entered: %s", computer_year.c_str());
-	LOG(output);
+	Serial.println(output);
 
 	// Entering the month
-	LOG(F("Enter the Month (1 ~ 12)"));
+	Serial.println(F("Enter the Month (1 ~ 12)"));
 
 	while(computer_month == ""){
 		computer_month = Serial.readStringUntil('\n');
 	}
     snprintf(output, OUTPUT_SIZE, "Month Entered: %s", computer_month.c_str());
-	LOG(output);
+	Serial.println(output);
 
 	// Entering the day
-	LOG(F("Enter the Day (1 ~ 31)"));
+	Serial.println(F("Enter the Day (1 ~ 31)"));
 
 	while(computer_day  == ""){
 		computer_day = Serial.readStringUntil('\n');
@@ -358,25 +328,15 @@ void deLoom_Hypnos::set_custom_time(){
     dateTime_toString(t, tbuf);
     snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
     LOG(output);
-    FUNCTION_END;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void Loom_Hypnos::setInterruptDuration(const TimeSpan duration){
-    FUNCTION_START;
     // The time in the future that the alarm will be set for
     timeAlarm = RTC_DS.now() + duration;
     RTC_DS.setAlarm1(timeAlarm, DS3231_A1_Date);
-
-    // Print the time that the next interrupt is set to trigger
-    DateTime t = RTC_DS.now();
-    char tbuf[21];
-    dateTime_toString(t, tbuf);
-    LOGF("Current Time (UTC): %s", tbuf, true);
-    dateTime_toString(timeAlarm, tbuf);
-    LOGF("Next interrupt alarm set for: %s", tbuf, true);
-    FUNCTION_END;
+    Serial.println("Next interrupt alarm set.");
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 

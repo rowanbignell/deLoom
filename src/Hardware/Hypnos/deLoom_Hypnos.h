@@ -54,9 +54,8 @@ class deLoom_Hypnos{
          * Constructs a new Hypnos Instance using the manager to hold information about the device
          * @param man Reference to the manager
          * @param use_custom_time Use a specific time set by the user that is different than the compile time
-         * @param useSD Whether or not SD card functionality should be enabled
          */
-        deLoom_Hypnos(Manager& man, bool use_custom_time = true, bool useSD = false);
+        deLoom_Hypnos(Manager& man, bool use_custom_time = true);
 
         /**
          *  Cleanup any dynamically allocated pointers
