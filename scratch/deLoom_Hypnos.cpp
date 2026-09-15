@@ -146,3 +146,60 @@ bool is5VDisabled(DEVICE_STATE deviceState){
     // We should never make it here but enable the rail if we do
     return false;
 }
+
+void set_custom_time(){
+   	// initialized variable for user input
+	String computer_year = "";
+	String computer_month = "";
+	String computer_day = "";
+	String computer_hour = "";
+	String computer_min = "";
+	String computer_sec = "";
+    char output[OUTPUT_SIZE];
+
+	// Let the user know that they should NOT enter local time
+	Serial.println(F("Please use UTC time, not local!"));
+
+	// Entering the year
+	Serial.println(F("Enter the Year (Four digits, e.g. 2020)"));
+	while(computer_year == ""){
+		computer_year = Serial.readStringUntil('\n');
+	}
+
+	// Entering the month
+	Serial.println(F("Enter the Month (1 ~ 12)"));
+	while(computer_month == ""){
+		computer_month = Serial.readStringUntil('\n');
+	}
+
+	// Entering the day
+	Serial.println(F("Enter the Day (1 ~ 31)"));
+	while(computer_day  == ""){
+		computer_day = Serial.readStringUntil('\n');
+	}
+
+	// Entering the hour
+	Serial.println(F("Enter the Hour (0 ~ 23)"));
+	while(computer_hour == ""){
+		computer_hour = Serial.readStringUntil('\n');
+	}
+
+	// Entering the minute
+	Serial.println(F("Enter the Minute (0 ~ 59)"));
+	while(computer_min == ""){
+		computer_min = Serial.readStringUntil('\n');
+	}
+
+	// Entering the second
+	Serial.println(F("Enter the Second (0 ~ 59)"));
+	while(computer_sec == ""){
+		computer_sec = Serial.readStringUntil('\n');
+	}
+
+    // Set the RTC to the custom time
+    RTC_DS.adjust(DateTime(computer_year.toInt(), computer_month.toInt(), computer_day.toInt(), computer_hour.toInt(), computer_min.toInt(), computer_sec.toInt()));
+    RTC_initialized = true;
+
+    // Output
+    Serial.println(F("Custom Time Set."));
+}

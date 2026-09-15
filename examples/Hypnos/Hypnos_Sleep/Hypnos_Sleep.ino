@@ -14,7 +14,7 @@ void setup() {
   // Start the serial interface
   begin_serial();
 
-  // Enable the hypnos rails
+  // Enable the rails
   hypnos_enable();
 
   // initialize the devices
