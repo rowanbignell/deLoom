@@ -136,7 +136,7 @@ bool deLoom_Hypnos::is5VDisabled(DEVICE_STATE deviceState){
 /* Interrupt Functionality */
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int interruptPin, HypnosInterruptType interruptType, int triggerState){
+bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int interruptPin, int triggerState){
     pinMode(interruptPin, INPUT_PULLUP);  //  Set interrupt pin input mode
     Serial.println(F("Registering interrupt..."));
 
@@ -165,7 +165,6 @@ bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int int
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 bool deLoom_Hypnos::reattachRTCInterrupt(int interruptPin){
-    FUNCTION_START;
     if(std::get<2>(pinToInterrupt[interruptPin]) != SLEEP){
 
         // If we haven't previously registered the interrupt we need to do this before we can reattach to an interrupt that doesn't exist
