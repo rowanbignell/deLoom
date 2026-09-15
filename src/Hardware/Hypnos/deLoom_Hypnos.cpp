@@ -137,9 +137,8 @@ bool deLoom_Hypnos::is5VDisabled(DEVICE_STATE deviceState){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int interruptPin, HypnosInterruptType interruptType, int triggerState){
-    FUNCTION_START;
     pinMode(interruptPin, INPUT_PULLUP);  //  Set interrupt pin input mode
-    LOG(F("Registering interrupt..."));
+    Serial.println(F("Registering interrupt..."));
 
     // If the RTC hasn't already been initialized then do so now if we are trying to schedule an RTC interrupt
     if(!RTC_initialized && interruptPin == 12)
@@ -147,29 +146,19 @@ bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int int
 
     // Make sure a callback function was supplied
     if(isrFunc != nullptr){
+        // If the interrupt we registered is for sleep we should set the interrupt to wake the device from sleep
+        LowPower.attachInterruptWakeup(interruptPin, isrFunc, triggerState);
+        Serial.println(F("Interrupt successfully attached!"));
 
-         // If the interrupt we registered is for sleep we should set the interrupt to wake the device from sleep
-        if(interruptType == SLEEP){
-            LowPower.attachInterruptWakeup(interruptPin, isrFunc, triggerState);
-            LOG(F("Interrupt successfully attached!"));
-        }
-        else{
-            attachInterrupt(digitalPinToInterrupt(interruptPin), isrFunc, triggerState);
-            attachInterrupt(digitalPinToInterrupt(interruptPin), isrFunc, triggerState);
-            LOG(F("Interrupt successfully attached!"));
-        }
         // Add the interrupt to the list of pin to interrupts
         pinToInterrupt.insert(std::make_pair(interruptPin, std::make_tuple(isrFunc, triggerState, interruptType)));
-        FUNCTION_END;
         return true;
     }
     else{
         detachInterrupt(digitalPinToInterrupt(interruptPin));
-        ERROR(F("Failed to attach interrupt! Interrupt callback evaluated to a null pointer, it is possible you forgot to supply a callback function"));
-        FUNCTION_END;
+        Serial.println(F("Failed to attach interrupt! Interrupt callback evaluated to a null pointer, it is possible you forgot to supply a callback function"));
         return false;
     }
-    FUNCTION_END;
     return false;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
