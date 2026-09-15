@@ -151,7 +151,7 @@ bool deLoom_Hypnos::registerInterrupt(InterruptCallbackFunction isrFunc, int int
         Serial.println(F("Interrupt successfully attached!"));
 
         // Add the interrupt to the list of pin to interrupts
-        pinToInterrupt.insert(std::make_pair(interruptPin, std::make_tuple(isrFunc, triggerState, interruptType)));
+        pinToInterrupt.insert(std::make_pair(interruptPin, std::make_pair(isrFunc, triggerState)));
         return true;
     }
     else{
@@ -178,16 +178,14 @@ void deLoom_Hypnos::wakeup(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::initializeRTC(){
-    FUNCTION_START
     char output[OUTPUT_SIZE];
-    LOG("Initializing DS3231....");
+    Serial.println("Initializing DS3231....");
 
     // If the RTC failed to start inform the user and hang
     if(!RTC_DS.begin()){
-        ERROR(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
+        Serial.println(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
         return;
     }
-
 
     // If we want to set a custom time
     if(Serial){
@@ -202,14 +200,10 @@ void deLoom_Hypnos::initializeRTC(){
     RTC_DS.writeSqwPinMode(DS3231_OFF);
 
     // We successfully started the RTC
-    LOG(F("DS3231 Real-Time Clock Initialized Successfully!"));
+    Serial.println(F("DS3231 Real-Time Clock Initialized Successfully!"));
     RTC_initialized = true;
     DateTime t = RTC_DS.now();
-    char tbuf[21];
-    dateTime_toString(t, tbuf);
-    snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
-    LOG(output);
-    FUNCTION_END
+    Serial.println(F("Custom time successfully set."));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -217,7 +211,6 @@ void deLoom_Hypnos::initializeRTC(){
 void deLoom_Hypnos::dateTime_toString(DateTime time, char array[21]){
     // Formatted as: YYYY-MM-DDTHH:MM:SSZ
     snprintf_P(array, 21, PSTR("%04u-%02u-%02uT%02u:%02u:%02uZ"), time.year(), time.month(), time.day(), time.hour(), time.minute(), time.second());
-   
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -237,54 +230,36 @@ void deLoom_Hypnos::set_custom_time(){
 
 	// Entering the year
 	Serial.println(F("Enter the Year (Four digits, e.g. 2020)"));
-
 	while(computer_year == ""){
 		computer_year = Serial.readStringUntil('\n');
 	}
 
-    snprintf(output, OUTPUT_SIZE, "Year Entered: %s", computer_year.c_str());
-	Serial.println(output);
-
 	// Entering the month
 	Serial.println(F("Enter the Month (1 ~ 12)"));
-
 	while(computer_month == ""){
 		computer_month = Serial.readStringUntil('\n');
 	}
-    snprintf(output, OUTPUT_SIZE, "Month Entered: %s", computer_month.c_str());
-	Serial.println(output);
 
 	// Entering the day
 	Serial.println(F("Enter the Day (1 ~ 31)"));
-
 	while(computer_day  == ""){
 		computer_day = Serial.readStringUntil('\n');
 	}
-    snprintf(output, OUTPUT_SIZE, "Day Entered: %s", computer_day.c_str());
-	LOG(output);
-
 
 	// Entering the hour
-	LOG(F("Enter the Hour (0 ~ 23)"));
-
+	Serial.println(F("Enter the Hour (0 ~ 23)"));
 	while(computer_hour == ""){
 		computer_hour = Serial.readStringUntil('\n');
 	}
 
-    snprintf(output, OUTPUT_SIZE, "Hour Entered: %s", computer_hour.c_str());
-	LOG(output);
-
 	// Entering the minute
-	LOG(F("Enter the Minute (0 ~ 59)"));
-
+	Serial.println(F("Enter the Minute (0 ~ 59)"));
 	while(computer_min == ""){
 		computer_min = Serial.readStringUntil('\n');
 	}
-    snprintf(output, OUTPUT_SIZE, "Minute Entered: %s", computer_min.c_str());
-	LOG(output);
 
 	// Entering the second
-	LOG(F("Enter the Second (0 ~ 59)"));
+	Serial.println(F("Enter the Second (0 ~ 59)"));
 	while(computer_sec == ""){
 		computer_sec = Serial.readStringUntil('\n');
 	}
@@ -294,11 +269,7 @@ void deLoom_Hypnos::set_custom_time(){
     RTC_initialized = true;
 
     // Output
-    DateTime t = RTC_DS.now();
-    char tbuf[21];
-    dateTime_toString(t, tbuf);
-    snprintf(output, OUTPUT_SIZE, "Custom time successfully set to: %s", tbuf);
-    LOG(output);
+    Serial.println(F("Custom Time Set."));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
