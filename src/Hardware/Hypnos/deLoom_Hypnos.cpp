@@ -202,8 +202,6 @@ void deLoom_Hypnos::initializeRTC(){
     // We successfully started the RTC
     Serial.println(F("DS3231 Real-Time Clock Initialized Successfully!"));
     RTC_initialized = true;
-    DateTime t = RTC_DS.now();
-    Serial.println(F("Custom time successfully set."));
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
