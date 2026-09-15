@@ -12,7 +12,7 @@
 void setup() {
 
   // Start the serial interface
-  manager.beginSerial();
+  beginSerial();
 
   // Enable the hypnos rails
   hypnos_enable();
@@ -30,5 +30,5 @@ void loop() {
   manager.display();
   
   // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
-  sleep();
+  sleep(5, true);
 }
