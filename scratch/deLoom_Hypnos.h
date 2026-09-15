@@ -5,6 +5,16 @@
 
 
 /**
+ * Enum to represent all power rail configurations
+ */
+enum POWERRAIL_CONFIG{
+    PR_3V_ON_5V_ON,            // Both the 3v and 5v rails are enabled
+    PR_3V_ON_5V_OFF,            // The 3v rail is enabled and the 5v rail is disabled
+    PR_3V_OFF_5V_ON,            // The 3v rail is disabled and the 5v rail is enabled
+    PR_3V_OFF_5V_OFF           // The 3v rail and the 5v rail are both disabled
+};
+
+/**
  * Drops the Feather M0 and Hypnos board into a low power sleep waiting for an interrupt to wake it up and pull it out of sleep
  * @param seconds Duration to sleep for
  * @param waitForSerial Whether or not we should wait for the user to open the serial monitor before continuing execution
