@@ -1,5 +1,11 @@
 #include "deLoom_Hypnos.h"
 
+void hypnos_init(){
+    // Set the pins to write mode
+    pinMode(5, OUTPUT);                     // 3.3v power rail
+    pinMode(6, OUTPUT);                     // 5v power rail
+    pinMode(LED_BUILTIN, OUTPUT);           // Status LED
+}
 
 void pre_sleep(){
     Serial.println((F("** Going to Sleep **")));
@@ -53,15 +59,17 @@ static void wakeup(){
 }
 
 void hypnos_enable(bool enable33, bool enable5){
-    // Set the pins to write mode
-    pinMode(5, OUTPUT);                     // 3.3v power rail
-    pinMode(6, OUTPUT);                     // 5v power rail
-    pinMode(LED_BUILTIN, OUTPUT);           // Status LED
-
     // Enable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (enable33) ? LOW : HIGH);
     digitalWrite(6, (enable5) ? HIGH : LOW);
     digitalWrite(LED_BUILTIN, HIGH);
+}
+
+void disable(bool disable33, bool disable5){
+    // Disable the 3.3v and 5v rails on the Hypnos
+    digitalWrite(5, (disable33) ? HIGH : LOW);
+    digitalWrite(6, (disable5) ? LOW : HIGH);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 void initializeRTC() {

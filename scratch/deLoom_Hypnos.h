@@ -13,6 +13,10 @@
 
 void hypnos_enable(bool enable33, bool enable5);
 
+void hypnos_disable(bool enable33, bool enable5);
+
+void hypnos_init();
+
 void initializeRTC();
 
 
