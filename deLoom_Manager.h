@@ -53,7 +53,7 @@ class Manager{
          * Start the Serial interface with some parameters, should we wait up to 20 seconds for the serial interface to open before continuing 
          * @param waitForSerial Whether or not we should wait 20 seconds for the user to open the serial monitor before continuing 
          */ 
-        void beginSerial(bool waitForSerial = true);
+        void beginSerial();
 
         /** 
          * Calls the initialization function on all added modules 
