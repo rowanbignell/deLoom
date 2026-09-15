@@ -73,6 +73,24 @@ void hypnos_disable(bool disable33, bool disable5){
 }
 
 void initializeRTC() {
+    Serial.println("Initializing DS3231....");
+
+    // If the RTC failed to start inform the user and hang
+    if(!RTC_DS.begin()){
+        ERROR(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
+        return;
+    }
+
+    // If we want to set a custom time
+    if(Serial){
+        set_custom_time();
+    }
+
+    RTC_DS.writeSqwPinMode(DS3231_OFF);
+
+    // We successfully started the RTC
+    Serial.println(F("DS3231 Real-Time Clock Initialized Successfully!"));
+    RTC_initialized = true;
 
 }
 

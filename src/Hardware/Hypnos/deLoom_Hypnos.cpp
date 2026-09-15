@@ -178,7 +178,6 @@ void deLoom_Hypnos::wakeup(){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 void deLoom_Hypnos::initializeRTC(){
-    char output[OUTPUT_SIZE];
     Serial.println("Initializing DS3231....");
 
     // If the RTC failed to start inform the user and hang
