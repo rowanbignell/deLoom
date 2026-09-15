@@ -41,14 +41,12 @@ DateTime getCurrentTime();
  * @param time The current time as a DateTime object
  * @param array The buffer to write the string to (size 21)
 */
-void dateTime_toString(DateTime time, char array[21], bool isLocal = false);
+void dateTime_toString(DateTime time, char array[21]);
 
 /**
  * Set a custom time on startup for the RTC to use
 */
 void set_custom_time();
-
-void initializeRTC();                                                               // Initialize RTC
 
 DateTime time;                                                                      // UTC time
 DateTime alarmTime;                                                                 // Time the alarm has been set for

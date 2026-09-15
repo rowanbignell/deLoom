@@ -203,3 +203,12 @@ void set_custom_time(){
     // Output
     Serial.println(F("Custom Time Set."));
 }
+
+DateTime getCurrentTime(){
+
+}
+
+void dateTime_toString(DateTime time, char array[21]){
+    
+}
+
