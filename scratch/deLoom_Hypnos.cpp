@@ -18,7 +18,7 @@ void pre_sleep(){
     Serial.end();
 
     // Disable the power rails
-    disable(disable33, disable5);
+    hypnos_disable(disable33, disable5);
 
 }
 
@@ -27,7 +27,7 @@ void post_sleep(){
     bool enable5 = !is5VDisabled(DEVICE_STATE::EXITING_SLEEP);
     bool enable33 = !is3VDisabled(DEVICE_STATE::EXITING_SLEEP);
 
-    enable(enable33, enable5); // Checks if the 3.3v or 5v are disabled and re-enables them
+    hypnos_enable(enable33, enable5); // Checks if the 3.3v or 5v are disabled and re-enables them
 
     Serial.println((F("** Woke Up **")));
 }
@@ -65,7 +65,7 @@ void hypnos_enable(bool enable33, bool enable5){
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
-void disable(bool disable33, bool disable5){
+void hypnos_disable(bool disable33, bool disable5){
     // Disable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (disable33) ? HIGH : LOW);
     digitalWrite(6, (disable5) ? LOW : HIGH);
