@@ -12,7 +12,7 @@
 void setup() {
 
   // Start the serial interface
-  beginSerial();
+  begin_serial();
 
   // Enable the hypnos rails
   hypnos_enable();
