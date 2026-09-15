@@ -8,8 +8,6 @@
 
 #include "Arduino.h"
 #include "Module.h"
-#include "Internet/Connectivity/NetworkComponent.h"
-
 #include "Hardware/Loom_Hypnos/SDManager.h"
 #include "Loom_Manager.h"
 
@@ -135,11 +133,6 @@ class deLoom_Hypnos{
         void sleep(bool waitForSerial = false);
 
         /**
-         * Get the current time from the RTC
-         */
-        DateTime getCurrentTime();
-
-        /**
          * Convert the current time to a ISO 8601 compatible time string
          *
          * @param time The current time as a DateTime object
@@ -192,8 +185,6 @@ class deLoom_Hypnos{
     private:
 
         Manager* manInst = nullptr;                                                         // Instance of the manager
-        NetworkComponent* networkComponent = nullptr;                                       // Reference to a NetworkComponent
-
         /* Power rail setup */
         // Power rail configuration for when the device is awake
         POWERRAIL_CONFIG wakeModePowerConfig = PR_3V_ON_5V_ON;
