@@ -1,12 +1,10 @@
 /**
  * This is an example use case for the Hypnos board's sleep functionality
  * This allows the user to put the Feather into a deep sleep disabling power to all sensors and then resume operation after a given length of time
- * 
- * MANAGER MUST BE INCLUDED FIRST IN ALL CODE
  */
 
-#include <src/core.h>
-#include <src/Hardware/Hypnos/deLoom_Hypnos.h>
+#include <deLoom_core.h>
+#include <Hardware/Hypnos/deLoom_Hypnos.h>
 
 
 void setup() {
