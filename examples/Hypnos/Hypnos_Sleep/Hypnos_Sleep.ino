@@ -20,6 +20,7 @@ void setup() {
   // initialize the devices
   initialize();
   
+  hypnos_init();
 }
 
 void loop() {

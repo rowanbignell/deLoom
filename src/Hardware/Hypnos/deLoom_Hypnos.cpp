@@ -1,10 +1,12 @@
-#include "deLoom_Hypnos.h"
+#include <deLoom_Hypnos.h>
 
 void hypnos_init(){
     // Set the pins to write mode
     pinMode(5, OUTPUT);                     // 3.3v power rail
     pinMode(6, OUTPUT);                     // 5v power rail
     pinMode(LED_BUILTIN, OUTPUT);           // Status LED
+
+    initializeRTC();
 }
 
 void pre_sleep(){
