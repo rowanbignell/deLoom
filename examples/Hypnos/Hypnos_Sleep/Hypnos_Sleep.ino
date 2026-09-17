@@ -5,8 +5,8 @@
  * MANAGER MUST BE INCLUDED FIRST IN ALL CODE
  */
 
-#include <scratch/core.h>
-#include <scratch/deLoom_Hypnos.h>
+#include <src/core.h>
+#include <src/Hardware/Hypnos/deLoom_Hypnos.h>
 
 
 void setup() {
@@ -18,16 +18,16 @@ void setup() {
   hypnos_enable();
 
   // initialize the devices
-  //manager.initialize();
+  initialize();
   
 }
 
 void loop() {
-  manager.measure();
+  measure();
 
-  manager.package();
+  package();
 
-  manager.display();
+  display();
   
   // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
   sleep(5, true);
