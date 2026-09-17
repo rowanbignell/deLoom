@@ -28,7 +28,7 @@ enum POWERRAIL_CONFIG{
  * @param seconds Duration to sleep for
  * @param waitForSerial Whether or not we should wait for the user to open the serial monitor before continuing execution
  */
- void sleep(uint32_t seconds, bool waitForSerial = false);
+void sleep(uint32_t seconds, bool waitForSerial = false);
 
 void hypnos_enable(bool enable33 = true, bool enable5 = true);
 
