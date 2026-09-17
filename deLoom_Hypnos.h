@@ -2,6 +2,7 @@
 #include <ArduinoLowPower.h>
 
 #include "Arduino.h"
+#include <deLoom_core.h>
 
 
 /**

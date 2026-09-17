@@ -1,5 +1,7 @@
 #include <deLoom_Hypnos.h>
 
+#include <deLoom_core.h>
+
 void hypnos_init(){
     // Set the pins to write mode
     pinMode(5, OUTPUT);                     // 3.3v power rail

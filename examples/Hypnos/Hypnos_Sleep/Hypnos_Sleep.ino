@@ -5,6 +5,7 @@
 
 #include <deLoom_core.h>
 #include <Hardware/Hypnos/deLoom_Hypnos.h>
+#include <Hardware/Hypnos/deLoom_Hypnos.cpp>
 
 
 void setup() {
