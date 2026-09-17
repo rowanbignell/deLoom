@@ -5,6 +5,15 @@
 
 
 /**
+ * Enum to easily see if we are going to sleep or waking up from sleep
+ */
+enum DEVICE_STATE{
+    ENTERING_SLEEP,
+    EXITING_SLEEP
+};
+
+
+/**
  * Enum to represent all power rail configurations
  */
 enum POWERRAIL_CONFIG{
