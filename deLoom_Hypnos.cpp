@@ -19,23 +19,18 @@ void pre_sleep(){
 
     delay(50);
 
-    bool disable5 = is5VDisabled(DEVICE_STATE::ENTERING_SLEEP);
-    bool disable33 = is3VDisabled(DEVICE_STATE::ENTERING_SLEEP);
-
     // Close the serial connection and detach
     Serial.end();
 
     // Disable the power rails
-    hypnos_disable(disable33, disable5);
+    hypnos_disable(USE_33, USE_5);
 
 }
 
 void post_sleep(){
     // Check if they are not disabled to see if they should be enabled
-    bool enable5 = !is5VDisabled(DEVICE_STATE::EXITING_SLEEP);
-    bool enable33 = !is3VDisabled(DEVICE_STATE::EXITING_SLEEP);
 
-    hypnos_enable(enable33, enable5); // Checks if the 3.3v or 5v are disabled and re-enables them
+    hypnos_enable(USE_33, USE_5);
 
     Serial.println((F("** Woke Up **")));
 
@@ -102,76 +97,6 @@ void initializeRTC() {
 
 }
 
-bool is3VDisabled(DEVICE_STATE deviceState){
-   
-    switch (deviceState)
-    {
-        case ENTERING_SLEEP:
-            switch (sleepModePowerConfig)
-            {
-                case PR_3V_ON_5V_ON:
-                    return false;
-                case PR_3V_ON_5V_OFF:
-                    return false;
-                case PR_3V_OFF_5V_ON:
-                    return true;
-                case PR_3V_OFF_5V_OFF:
-                    return true;
-            }
-            break;
-        case EXITING_SLEEP:
-            switch (wakeModePowerConfig)
-                {
-                    case PR_3V_ON_5V_ON:
-                        return false;
-                    case PR_3V_ON_5V_OFF:
-                        return false;
-                    case PR_3V_OFF_5V_ON:
-                        return true;
-                    case PR_3V_OFF_5V_OFF:
-                        return true;
-                }
-            break;
-    }
-
-    // We should never make it here but enable the rail if we do
-    return false;
-}
-
-bool is5VDisabled(DEVICE_STATE deviceState){
-    switch (deviceState)
-    {
-        case ENTERING_SLEEP:
-            switch (sleepModePowerConfig)
-            {
-                case PR_3V_ON_5V_ON:
-                    return false;
-                case PR_3V_OFF_5V_ON:
-                    return false;
-                case PR_3V_ON_5V_OFF:
-                    return true;
-                case PR_3V_OFF_5V_OFF:
-                    return true;
-            }
-            break;
-        case EXITING_SLEEP:
-            switch (wakeModePowerConfig)
-                {
-                    case PR_3V_ON_5V_ON:
-                        return false;
-                    case PR_3V_OFF_5V_ON:
-                        return false;
-                    case PR_3V_ON_5V_OFF:
-                        return true;
-                    case PR_3V_OFF_5V_OFF:
-                        return true;
-                }
-            break;
-    }
-
-    // We should never make it here but enable the rail if we do
-    return false;
-}
 
 void set_custom_time(){
    	// initialized variable for user input
