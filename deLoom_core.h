@@ -12,3 +12,5 @@ void power_up();
 void measure();
 
 void begin_serial();
+
+void initialize();
