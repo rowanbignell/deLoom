@@ -52,8 +52,8 @@ void dateTime_toString(DateTime time, char array[21]);
 */
 void set_custom_time();
 
-DateTime time;                                                                      // UTC time
-DateTime alarmTime;                                                                 // Time the alarm has been set for
+static DateTime time;                                                                      // UTC time
+static DateTime alarmTime;                                                                 // Time the alarm has been set for
 
 /* Sleep functionality */
 void pre_sleep();                            // Called just before the hypnos enters sleep, this disconnects the power rails and the serial bus
@@ -70,3 +70,10 @@ static void wakeup();
 static volatile bool shouldPowerUp;
 static RTC_DS3231 RTC_DS;                                                                  // Real time clock reference
 static bool RTC_initialized = false;
+
+/* Power rail setup */
+// Power rail configuration for when the device is awake
+static POWERRAIL_CONFIG wakeModePowerConfig = PR_3V_ON_5V_ON;
+
+// Power rail configuration for the when the device is asleep
+static POWERRAIL_CONFIG sleepModePowerConfig = PR_3V_OFF_5V_OFF;
