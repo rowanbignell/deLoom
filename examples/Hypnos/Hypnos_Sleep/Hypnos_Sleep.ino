@@ -17,14 +17,18 @@ void setup() {
   // initialize the devices
   initialize();
   
+  // initalize the hypnos
   hypnos_init();
 }
 
 void loop() {
+  //measure from the sensors
   measure();
 
+  //package measurements from the sensors
   package();
 
+  //display measurements from the sensors
   display();
   
   // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
