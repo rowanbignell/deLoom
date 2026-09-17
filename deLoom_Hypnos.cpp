@@ -1,6 +1,9 @@
 #include <deLoom_Hypnos.h>
 #include <deLoom_core.h>
 
+/** 
+* hypnos initialization tasks
+*/
 void hypnos_init(){
     // Set the pins to write mode
     pinMode(5, OUTPUT);                     // 3.3v power rail
@@ -10,6 +13,9 @@ void hypnos_init(){
     initializeRTC();
 }
 
+/** 
+* pre-sleep tasks
+*/
 void pre_sleep(){
     Serial.println((F("** Going to Sleep **")));
 
@@ -26,6 +32,9 @@ void pre_sleep(){
 
 }
 
+/** 
+* post-sleep startup tasks
+*/
 void post_sleep(){
     //enable the power rails
     hypnos_enable(USE_33, USE_5);
@@ -39,7 +48,11 @@ void post_sleep(){
     power_up();
 
 }
-
+/** 
+* sleep for given amount of seconds
+* @param seconds amount of seconds to sleep
+* @param waitForSerial whether to wait for the serial monitor
+*/
 void sleep(uint32_t seconds, bool waitForSerial){
     pre_sleep();
 
@@ -61,10 +74,18 @@ void sleep(uint32_t seconds, bool waitForSerial){
     }
 }
 
+/**
+ * On wakeup placeholder
+*/
 static void wakeup(){
 
 }
 
+/** 
+* re-enable the power rails on the hypnos
+* @param enable33 if the 3.3v rail should be enabled
+* @param enable5 if the 5v rail should be enabled
+*/
 void hypnos_enable(bool enable33, bool enable5){
     // Enable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (enable33) ? LOW : HIGH);
@@ -72,6 +93,11 @@ void hypnos_enable(bool enable33, bool enable5){
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
+/** 
+* disable the power rails on the hypnos
+* @param disable33 if the 3.3v rail should be disabled
+* @param disable5 if the 5v rail should be disabled
+*/
 void hypnos_disable(bool disable33, bool disable5){
     // Disable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, (disable33) ? HIGH : LOW);
@@ -79,6 +105,9 @@ void hypnos_disable(bool disable33, bool disable5){
     digitalWrite(LED_BUILTIN, LOW);
 }
 
+/**
+ * RTC initialization tasks
+*/
 void initializeRTC() {
     Serial.println("Initializing DS3231....");
 
@@ -101,7 +130,9 @@ void initializeRTC() {
 
 }
 
-
+/**
+ * Set custom time for RTC from user input
+*/
 void set_custom_time(){
    	// initialized variable for user input
 	String computer_year = "";
