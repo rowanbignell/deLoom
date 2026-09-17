@@ -32,6 +32,8 @@ void post_sleep(){
 
     hypnos_enable(USE_33, USE_5);
 
+    Serial.begin(BAUD_RATE);
+
     Serial.println((F("** Woke Up **")));
 
     // power on the devices
