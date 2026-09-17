@@ -85,7 +85,7 @@ void initializeRTC() {
 
     // If the RTC failed to start inform the user and hang
     if(!RTC_DS.begin()){
-        ERROR(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
+        Serial.println(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
         return;
     }
 
@@ -181,8 +181,6 @@ void set_custom_time(){
 	String computer_hour = "";
 	String computer_min = "";
 	String computer_sec = "";
-    char output[OUTPUT_SIZE];
-
 	// Let the user know that they should NOT enter local time
 	Serial.println(F("Please use UTC time, not local!"));
 

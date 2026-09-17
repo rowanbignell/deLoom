@@ -68,3 +68,5 @@ bool is3VDisabled(DEVICE_STATE deviceState);
  */
 static void wakeup();
 static volatile bool shouldPowerUp;
+static RTC_DS3231 RTC_DS;                                                                  // Real time clock reference
+static bool RTC_initialized = false;
