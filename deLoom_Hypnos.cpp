@@ -71,6 +71,7 @@ void sleep(uint32_t seconds, bool waitForSerial){
     //wait for the serial monitor to start
     if (waitForSerial){
         while(!Serial);
+        // add timeout
     }
 }
 
@@ -88,7 +89,7 @@ static void wakeup(){
 */
 void hypnos_enable(bool enable33, bool enable5){
     // Enable the 3.3v and 5v rails on the Hypnos
-    digitalWrite(5, (enable33) ? LOW : HIGH);
+    digitalWrite(5,  LOW);
     digitalWrite(6, (enable5) ? HIGH : LOW);
     digitalWrite(LED_BUILTIN, HIGH);
 }
