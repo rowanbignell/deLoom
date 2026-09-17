@@ -1,5 +1,4 @@
 #include <deLoom_Hypnos.h>
-
 #include <deLoom_core.h>
 
 void hypnos_init(){
@@ -28,10 +27,10 @@ void pre_sleep(){
 }
 
 void post_sleep(){
-    // Check if they are not disabled to see if they should be enabled
-
+    //enable the power rails
     hypnos_enable(USE_33, USE_5);
 
+    //start the serial monitor
     Serial.begin(BAUD_RATE);
 
     Serial.println((F("** Woke Up **")));
@@ -43,17 +42,20 @@ void post_sleep(){
 
 void sleep(uint32_t seconds, bool waitForSerial){
     pre_sleep();
-    shouldPowerUp = false;
 
+    //set up alarm then sleep
+    shouldPowerUp = false;
     LowPower.attachInterruptWakeup(RTC_ALARM_WAKEUP, wakeup, 0);
     LowPower.sleep(seconds);
 
+    //if it's not time to wake up yet, go back to sleep
     while (!shouldPowerUp) {
         LowPower.sleep();
     }
 
     post_sleep();  // Wake up
 
+    //wait for the serial monitor to start
     if (waitForSerial){
         while(!Serial);
     }
@@ -86,7 +88,7 @@ void initializeRTC() {
         return;
     }
 
-    // If we want to set a custom time
+    //set a custom time if the serial monitor is active
     if(Serial){
         set_custom_time();
     }
