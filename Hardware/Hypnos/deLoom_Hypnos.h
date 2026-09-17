@@ -30,9 +30,9 @@ enum POWERRAIL_CONFIG{
  */
  void sleep(uint32_t seconds, bool waitForSerial = false);
 
-void hypnos_enable(bool enable33, bool enable5);
+void hypnos_enable(bool enable33 = true, bool enable5 = true);
 
-void hypnos_disable(bool enable33, bool enable5);
+void hypnos_disable(bool disable33 = true, bool disable5 = true);
 
 void hypnos_init();
 
