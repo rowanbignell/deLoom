@@ -1,5 +1,6 @@
 #include <deLoom_Hypnos.h>
 #include <deLoom_core.h>
+#include <deLoom_SD.h>
 
 /** 
 * hypnos initialization tasks
@@ -98,6 +99,16 @@ void hypnos_enable(bool enable33, bool enable5){
     digitalWrite(5, LOW);
     digitalWrite(6, HIGH);
     digitalWrite(LED_BUILTIN, HIGH);
+
+    if(enableSD){
+        // Enable SPI pins
+        pinMode(23, OUTPUT);
+        pinMode(24, OUTPUT);
+        pinMode(sd_chip_select, OUTPUT);
+
+        sdMan->begin();
+    }
+
 }
 
 /** 
@@ -110,6 +121,13 @@ void hypnos_disable(bool disable33, bool disable5){
     digitalWrite(5, HIGH);
     digitalWrite(6, LOW);
     digitalWrite(LED_BUILTIN, LOW);
+
+    if(enableSD){
+        // Disable SPI pins/SD chip select to save power
+        pinMode(23, INPUT);
+        pinMode(24, INPUT);
+        pinMode(sd_chip_select, INPUT);
+    }
 }
 
 /**

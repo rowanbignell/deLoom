@@ -9,7 +9,7 @@ void power_down();
 
 void power_up();
 
-void measure();
+void measure(bool display = true);
 
 void begin_serial(bool waitForSerial);
 

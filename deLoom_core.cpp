@@ -8,10 +8,14 @@ void power_up(){
     //power up the sensors
 }
 
-void measure(){
+void measure(bool display){
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
 
+
+    if(display){
+        display();
+    }
 }
 
 void begin_serial(bool waitForSerial){
