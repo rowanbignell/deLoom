@@ -11,7 +11,7 @@ void power_up();
 
 void measure();
 
-void begin_serial();
+void begin_serial(bool waitForSerial);
 
 void initialize();
 

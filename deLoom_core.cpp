@@ -10,10 +10,24 @@ void power_up(){
 
 void measure(){
     //pull measure data from the sensors
+    Serial.println(F("Ran measure()"));
+
 }
 
-void begin_serial(){
+void begin_serial(bool waitForSerial){
+    long startMillis = millis();
+
     Serial.begin(BAUD_RATE);
+
+    //wait for the serial monitor to start
+    if(waitForSerial){
+        while(!Serial){
+            // If it has been 20 seconds break out of the loop
+            if(millis() >= (startMillis+20000)){
+                break;
+            }
+        }
+    }
 }
 
 void initialize(){
