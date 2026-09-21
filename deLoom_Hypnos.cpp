@@ -22,10 +22,9 @@ void pre_sleep(){
     //power down the devices
     power_down();
 
-    delay(50);
-
     // Close the serial connection and detach
     Serial.end();
+    delay(50);
 
     // Disable the power rails
     hypnos_disable(USE_33, USE_5);
@@ -40,7 +39,7 @@ void post_sleep(){
     hypnos_enable(USE_33, USE_5);
 
     //start the serial monitor
-    Serial.begin(BAUD_RATE);
+    begin_serial(true);
 
     Serial.println((F("** Woke Up **")));
 
@@ -85,6 +84,7 @@ void sleep(uint32_t seconds, bool waitForSerial){
  * On wakeup placeholder
 */
 static void wakeup(){
+    shouldPowerUp = true;
 
 }
 
@@ -95,8 +95,8 @@ static void wakeup(){
 */
 void hypnos_enable(bool enable33, bool enable5){
     // Enable the 3.3v and 5v rails on the Hypnos
-    digitalWrite(5, (enable33) ? LOW : HIGH);
-    digitalWrite(6, (enable5) ? HIGH : LOW);
+    digitalWrite(5, LOW);
+    digitalWrite(6, HIGH);
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
@@ -107,8 +107,8 @@ void hypnos_enable(bool enable33, bool enable5){
 */
 void hypnos_disable(bool disable33, bool disable5){
     // Disable the 3.3v and 5v rails on the Hypnos
-    digitalWrite(5, (disable33) ? HIGH : LOW);
-    digitalWrite(6, (disable5) ? LOW : HIGH);
+    digitalWrite(5, HIGH);
+    digitalWrite(6, LOW);
     digitalWrite(LED_BUILTIN, LOW);
 }
 
