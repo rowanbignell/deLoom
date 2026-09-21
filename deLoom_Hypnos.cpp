@@ -28,7 +28,7 @@ void pre_sleep(){
     delay(50);
 
     // Disable the power rails
-    hypnos_disable(USE_33, USE_5);
+    hypnos_disable();
 
 }
 
@@ -37,7 +37,7 @@ void pre_sleep(){
 */
 void post_sleep(){
     //enable the power rails
-    hypnos_enable(USE_33, USE_5);
+    hypnos_enable();
 
     //start the serial monitor
     begin_serial(true);
@@ -86,7 +86,6 @@ void sleep(uint32_t seconds, bool waitForSerial){
 */
 static void wakeup(){
     shouldPowerUp = true;
-
 }
 
 /** 
@@ -94,7 +93,7 @@ static void wakeup(){
 * @param enable33 if the 3.3v rail should be enabled
 * @param enable5 if the 5v rail should be enabled
 */
-void hypnos_enable(bool enable33, bool enable5){
+void hypnos_enable(){
     // Enable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, LOW);
     digitalWrite(6, HIGH);
@@ -116,7 +115,7 @@ void hypnos_enable(bool enable33, bool enable5){
 * @param disable33 if the 3.3v rail should be disabled
 * @param disable5 if the 5v rail should be disabled
 */
-void hypnos_disable(bool disable33, bool disable5){
+void hypnos_disable(){
     // Disable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, HIGH);
     digitalWrite(6, LOW);

@@ -4,19 +4,6 @@
 #include "Arduino.h"
 #include <deLoom_core.h>
 
-
-#define USE_33 true
-#define USE_5 true
-
-
-/**
- * Enum to easily see if we are going to sleep or waking up from sleep
- */
-enum DEVICE_STATE{
-    ENTERING_SLEEP,
-    EXITING_SLEEP
-};
-
 /**
  * Drops the Feather M0 and Hypnos board into a low power sleep waiting for an interrupt to wake it up and pull it out of sleep
  * @param seconds Duration to sleep for
@@ -24,9 +11,9 @@ enum DEVICE_STATE{
  */
 void sleep(uint32_t seconds, bool waitForSerial = false);
 
-void hypnos_enable(bool enable33 = USE_33, bool enable5 = USE_5);
+void hypnos_enable();
 
-void hypnos_disable(bool disable33 = USE_33, bool disable5 = USE_5);
+void hypnos_disable();
 
 void hypnos_init();
 
@@ -56,6 +43,7 @@ void post_sleep();                           // Called just after the hypnos wak
 /**
  * Handle interrupt when waking from sleep
  */
+
 static void wakeup();
 static volatile bool shouldPowerUp;
 static RTC_DS3231 RTC_DS;                                                                  // Real time clock reference

@@ -5,6 +5,10 @@
 
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
+#include <deLoom_SD.h>
+
+deLoom_Instance deLoom();
+Hypnos_Instance Hypnos();
 
 void setup() {
 
