@@ -58,7 +58,7 @@ void sleep(uint32_t seconds, bool waitForSerial){
     //set up alarm then sleep
     shouldPowerUp = false;
     LowPower.attachInterruptWakeup(RTC_ALARM_WAKEUP, wakeup, 0);
-    LowPower.sleep(seconds);
+    LowPower.sleep(seconds*1000);
 
     //if it's not time to wake up yet, go back to sleep
     while (!shouldPowerUp) {
