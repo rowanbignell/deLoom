@@ -7,7 +7,6 @@
 #include <string.h>
 
 #define BAUD_RATE 115200        // Serial interface baud rate
-#define JSON_SIZE 2000
 
 void power_down();
 
@@ -28,5 +27,6 @@ struct deLoom_Instance{
     char deviceName[100];                                   // Name of the device
     uint32_t instanceNumber;                                // Instance number of the device
     uint32_t packetNumber = 1;                              // Tracks the current packet number
+    DynamicJsonDocument doc;
     char serial_num[33];
 };

@@ -1,10 +1,6 @@
-#include <ArduinoJson.h>
-#include "Arduino.h"
-
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
-
 
 void power_down(){
     //power down the sensors
@@ -19,7 +15,6 @@ void measure(bool display){
     Serial.println(F("Ran measure()"));
 
     //create package exterior
-    DynamicJsonDocument doc(JSON_SIZE);
 
     //run measure on the submodules giving them the exterior
 
