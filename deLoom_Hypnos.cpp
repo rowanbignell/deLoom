@@ -5,33 +5,13 @@
 /** 
 * hypnos initialization tasks
 */
-void hypnos_init(Hypnos_Instance* hypnos){
-
+void hypnos_init(){
     // Set the pins to write mode
     pinMode(5, OUTPUT);                     // 3.3v power rail
     pinMode(6, OUTPUT);                     // 5v power rail
     pinMode(LED_BUILTIN, OUTPUT);           // Status LED
 
-    // initialize rtc
-    Serial.println("Initializing DS3231....");
-
-    // If the RTC failed to start inform the user and hang
-    if(!hypnos->RTC_DS.begin()){
-        Serial.println(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
-        return;
-    }
-
-    //set a custom time if the serial monitor is active
-    if(Serial){
-        set_custom_time();
-    }
-
-    hypnos->RTC_DS.writeSqwPinMode(DS3231_OFF);
-
-    // We successfully started the RTC
-    Serial.println(F("DS3231 Real-Time Clock Initialized Successfully!"));
-    hypnos->RTC_initialized = true;
-
+    initializeRTC();
 }
 
 /** 
@@ -143,6 +123,31 @@ void hypnos_disable(){
         pinMode(24, INPUT);
         pinMode(sd_chip_select, INPUT);
     }
+}
+
+/**
+ * RTC initialization tasks
+*/
+void initializeRTC() {
+    Serial.println("Initializing DS3231....");
+
+    // If the RTC failed to start inform the user and hang
+    if(!RTC_DS.begin()){
+        Serial.println(F("Couldn't start RTC! Check your connections... Execution will now hang as this is likely a fatal error"));
+        return;
+    }
+
+    //set a custom time if the serial monitor is active
+    if(Serial){
+        set_custom_time();
+    }
+
+    RTC_DS.writeSqwPinMode(DS3231_OFF);
+
+    // We successfully started the RTC
+    Serial.println(F("DS3231 Real-Time Clock Initialized Successfully!"));
+    RTC_initialized = true;
+
 }
 
 /**

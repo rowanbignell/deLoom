@@ -9,7 +9,6 @@
 
 deLoom_Instance deloom;
 sdManager_Instance sdman;
-Hypnos_Instance hypnos;
 
 void setup() {
 
