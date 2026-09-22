@@ -5,9 +5,10 @@
 
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
+#include <deLoom_SD.h>
 
-//deLoom_Instance deLoom();
-//Hypnos_Instance Hypnos();
+deLoom_Instance deloom();
+sdManager_Instance sd_man();
 
 void setup() {
 
@@ -26,13 +27,7 @@ void setup() {
 
 void loop() {
   //measure from the sensors
-  measure();
-
-  //package measurements from the sensors
-  package();
-
-  //display measurements from the sensors
-  display();
+  measure(true);
   
   // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
   sleep(5, true);
