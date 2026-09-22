@@ -17,10 +17,7 @@ void hypnos_enable();
 
 void hypnos_disable();
 
-void hypnos_init();
-
-void initializeRTC();
-
+void hypnos_init(Hypnos_Instance* hypnos);
 /**
  * Convert the current time to a ISO 8601 compatible time string
  *
@@ -44,9 +41,12 @@ void post_sleep();                           // Called just after the hypnos wak
  */
 
 static void wakeup();
-static volatile bool shouldPowerUp;
-static RTC_DS3231 RTC_DS;                                                                  // Real time clock reference
-static bool RTC_initialized = false;
-static DateTime Hypnos_alarmTime;                                                                 // Time the alarm has been set for
-static DateTime Hypnos_time;                                                                      // UTC time
-static bool enableSD = true;
+
+struct Hypnos_Instance {
+    static volatile bool shouldPowerUp;
+    RTC_DS3231 RTC_DS;                                                                  // Real time clock reference
+    bool RTC_initialized = false;
+    DateTime alarmTime;                                                                 // Time the alarm has been set for
+    DateTime time;                                                                      // UTC time
+    bool enableSD = true;
+};
