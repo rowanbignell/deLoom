@@ -23,7 +23,7 @@ struct sdManager_Instance{
     File root;
 
     SdFat sd;
-    int chip_select;                                        // Chip select pin for the SD card
+    int chip_select = 11;                                        // Chip select pin for the SD card
     char device_name[100];                                  // Device name of the whole thing used as the starting point of the SD file name
 
     char batchFileName[260];                                // File name to log batches to
