@@ -1,4 +1,6 @@
 #include <deLoom_core.h>
+#include <deLoom_Hypnos.h>
+#include <deLoom_SD.h>
 
 void power_down(){
     //power down the sensors
@@ -8,9 +10,23 @@ void power_up(){
     //power up the sensors
 }
 
-void measure(){
+void measure(bool display){
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
+
+    //create package exterior
+
+    //run measure on the submodules giving them the exterior
+
+    //display?
+    if (display){
+        //display finished packet
+    }
+
+    //log finished packet?
+    if(enableSD){
+
+    }
 }
 
 void begin_serial(bool waitForSerial){
