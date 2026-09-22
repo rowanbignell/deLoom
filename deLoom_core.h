@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Arduino.h"
 #include <ArduinoJson.h>
 #include <Wire.h>
@@ -10,7 +12,7 @@ void power_down();
 
 void power_up();
 
-void measure(bool display = true);
+void measure();
 
 void begin_serial(bool waitForSerial);
 
@@ -27,5 +29,4 @@ struct deLoom_Instance{
     uint32_t packetNumber = 1;                              // Tracks the current packet number
     DynamicJsonDocument doc;
     char serial_num[33];
-
 };

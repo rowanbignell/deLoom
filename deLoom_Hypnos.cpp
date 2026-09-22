@@ -90,8 +90,6 @@ static void wakeup(){
 
 /** 
 * re-enable the power rails on the hypnos
-* @param enable33 if the 3.3v rail should be enabled
-* @param enable5 if the 5v rail should be enabled
 */
 void hypnos_enable(){
     // Enable the 3.3v and 5v rails on the Hypnos
@@ -105,15 +103,13 @@ void hypnos_enable(){
         pinMode(24, OUTPUT);
         pinMode(sd_chip_select, OUTPUT);
 
-        sdMan->begin();
+        sd_begin();
     }
 
 }
 
 /** 
 * disable the power rails on the hypnos
-* @param disable33 if the 3.3v rail should be disabled
-* @param disable5 if the 5v rail should be disabled
 */
 void hypnos_disable(){
     // Disable the 3.3v and 5v rails on the Hypnos

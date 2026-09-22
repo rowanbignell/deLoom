@@ -5,15 +5,14 @@
 
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
-#include <deLoom_SD.h>
 
-deLoom_Instance deLoom();
-Hypnos_Instance Hypnos();
+//deLoom_Instance deLoom();
+//Hypnos_Instance Hypnos();
 
 void setup() {
 
   // Start the serial interface
-  begin_serial();
+  begin_serial(true);
 
   // Enable the rails
   hypnos_enable();

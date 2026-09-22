@@ -1,3 +1,5 @@
+#pragma once
+
 #include <OPEnS_RTC.h>
 #include <ArduinoLowPower.h>
 
@@ -32,9 +34,6 @@ void dateTime_toString(DateTime time, char array[21]);
 */
 void set_custom_time();
 
-static DateTime time;                                                                      // UTC time
-static DateTime alarmTime;                                                                 // Time the alarm has been set for
-
 /* Sleep functionality */
 void pre_sleep();                            // Called just before the hypnos enters sleep, this disconnects the power rails and the serial bus
 void post_sleep();                           // Called just after the hypnos wakes up, this reconnects the power rails and the serial bus
@@ -48,3 +47,6 @@ static void wakeup();
 static volatile bool shouldPowerUp;
 static RTC_DS3231 RTC_DS;                                                                  // Real time clock reference
 static bool RTC_initialized = false;
+static DateTime Hypnos_alarmTime;                                                                 // Time the alarm has been set for
+static DateTime Hypnos_time;                                                                      // UTC time
+static bool enableSD = true;
