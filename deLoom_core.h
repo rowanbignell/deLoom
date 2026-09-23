@@ -17,7 +17,10 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName);
 
 void begin_serial(bool waitForSerial);
 
-void deLoom_initialize();
+void deLoom_initialize(char* serial_num);
+
+void read_serial_num(char* serial_num);
+
 
 void deLoom_package();
 
