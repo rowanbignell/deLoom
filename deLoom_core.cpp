@@ -10,7 +10,7 @@ void power_up(){
     //power up the sensors
 }
 
-void deLoom_measure(bool display){
+void deLoom_measure(bool display, SdFat* sd, char* deviceName){
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
 
@@ -18,7 +18,7 @@ void deLoom_measure(bool display){
 
     //create package exterior
     File myFile;
-    //myFile = sd.open(deviceName, O_RDWR | O_CREAT | O_APPEND);
+    myFile = sd->open(deviceName, O_RDWR | O_CREAT | O_APPEND);
 
 
     //run measure on the submodules giving them the exterior

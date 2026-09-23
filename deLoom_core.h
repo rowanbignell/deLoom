@@ -5,6 +5,7 @@
 #include <Wire.h>
 #include <stdio.h>
 #include <string.h>
+#include <SdFat.h>
 
 #define BAUD_RATE 115200        // Serial interface baud rate
 
@@ -12,7 +13,7 @@ void power_down();
 
 void power_up();
 
-void deLoom_measure(bool display);
+void deLoom_measure(bool display, SdFat* sd, char* deviceName);
 
 void begin_serial(bool waitForSerial);
 

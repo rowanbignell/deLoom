@@ -6,6 +6,15 @@
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
+#include <SdFat.h>
+
+
+char deviceName[100] = "Test";                                // Name of the device
+uint32_t instanceNumber = 1;                                // Instance number of the device
+uint32_t packetNumber = 1;                              // Tracks the current packet number
+char serial_num[33];
+SdFat sd;
+
 
 void setup() {
 
@@ -16,7 +25,7 @@ void setup() {
   hypnos_enable();
 
   // initialize the devices
-  initialize();
+  deLoom_initialize();
   
   // initalize the hypnos
   hypnos_init();
@@ -24,7 +33,7 @@ void setup() {
 
 void loop() {
   //measure from the sensors
-  measure(true);
+  deLoom_measure(true, &sd, deviceName);
   
   // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
   sleep(5, true);
