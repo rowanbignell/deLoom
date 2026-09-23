@@ -11,9 +11,9 @@
  * @param seconds Duration to sleep for
  * @param waitForSerial Whether or not we should wait for the user to open the serial monitor before continuing execution
  */
-void sleep(uint32_t seconds, bool waitForSerial = false);
+void sleep(SdFat* sd, uint32_t seconds, bool waitForSerial = false);
 
-void hypnos_enable();
+void hypnos_enable(SdFat* sd);
 
 void hypnos_disable();
 
@@ -36,7 +36,7 @@ void set_custom_time();
 
 /* Sleep functionality */
 void pre_sleep();                            // Called just before the hypnos enters sleep, this disconnects the power rails and the serial bus
-void post_sleep();                           // Called just after the hypnos wakes up, this reconnects the power rails and the serial bus
+void post_sleep(SdFat* sd);                           // Called just after the hypnos wakes up, this reconnects the power rails and the serial bus
 
 
 /**

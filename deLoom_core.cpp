@@ -17,9 +17,6 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName){
     DynamicJsonDocument doc(2000);
 
     //create package exterior
-    File myFile;
-    myFile = sd->open(deviceName, O_RDWR | O_CREAT | O_APPEND);
-
 
     //run measure on the submodules giving them the exterior
 
@@ -30,7 +27,10 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName){
 
     //log finished packet?
     if(enableSD){
+        File myFile;
+        myFile = sd->open(deviceName, O_RDWR | O_CREAT | O_APPEND);
 
+        //etc
     }
 }
 

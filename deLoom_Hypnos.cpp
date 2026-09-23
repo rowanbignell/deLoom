@@ -35,9 +35,9 @@ void pre_sleep(){
 /** 
 * post-sleep startup tasks
 */
-void post_sleep(){
+void post_sleep(SdFat* sd){
     //enable the power rails
-    hypnos_enable();
+    hypnos_enable(sd);
 
     //start the serial monitor
     begin_serial(true);
@@ -53,7 +53,7 @@ void post_sleep(){
 * @param seconds amount of seconds to sleep
 * @param waitForSerial whether to wait for the serial monitor
 */
-void sleep(uint32_t seconds, bool waitForSerial){
+void sleep(SdFat* sd, uint32_t seconds, bool waitForSerial){
     pre_sleep();
 
     //set up alarm then sleep
@@ -66,7 +66,7 @@ void sleep(uint32_t seconds, bool waitForSerial){
         LowPower.sleep();
     }
 
-    post_sleep();  // Wake up
+    post_sleep(sd);  // Wake up
 
     long startMillis = millis();
 
@@ -91,7 +91,7 @@ static void wakeup(){
 /** 
 * re-enable the power rails on the hypnos
 */
-void hypnos_enable(){
+void hypnos_enable(SdFat* sd){
     // Enable the 3.3v and 5v rails on the Hypnos
     digitalWrite(5, LOW);
     digitalWrite(6, HIGH);
@@ -103,7 +103,7 @@ void hypnos_enable(){
         pinMode(24, OUTPUT);
         pinMode(sd_chip_select, OUTPUT);
 
-        sd_begin();
+        sd_begin(sd);
     }
 
 }
