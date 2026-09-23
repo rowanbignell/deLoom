@@ -10,11 +10,16 @@ void power_up(){
     //power up the sensors
 }
 
-void measure(bool display){
+void deLoom_measure(bool display){
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
 
+    DynamicJsonDocument doc(2000);
+
     //create package exterior
+    File myFile;
+    //myFile = sd.open(deviceName, O_RDWR | O_CREAT | O_APPEND);
+
 
     //run measure on the submodules giving them the exterior
 
@@ -45,14 +50,14 @@ void begin_serial(bool waitForSerial){
     }
 }
 
-void initialize(){
+void deLoom_initialize(){
     //do any initialization tasks that the sensors require
 }
 
-void package(){
+void deLoom_package(){
     //package the data from measure (might simplify for now idk)
 }
 
-void display(){
+void deLoom_display(){
     //display data from package (might simplify away for now idk)
 }

@@ -7,9 +7,6 @@
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
 
-deLoom_Instance deloom();
-sdManager_Instance sd_man();
-
 void setup() {
 
   // Start the serial interface
