@@ -35,6 +35,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     //JsonObject json = get_data_object("Packet");
     //json["Number"] = packetNum;
 
+    // TODO:
     //run measure on the submodules giving them the exterior
 
     *packetNum++;
@@ -42,6 +43,9 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     //display?
     if (display){
         //display finished packet
+        char jsonStr[MAX_JSON_SIZE];
+        serializeJsonPretty(doc, jsonStr, MAX_JSON_SIZE);
+        Serial.println(jsonStr);
     }
 
     //log finished packet?
