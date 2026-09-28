@@ -10,6 +10,7 @@
 
 
 #define BAUD_RATE 115200        // Serial interface baud rate
+#define MAX_JSON_SIZE 2000
 
 void power_down();
 

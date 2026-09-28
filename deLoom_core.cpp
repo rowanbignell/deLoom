@@ -15,7 +15,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
 
-    DynamicJsonDocument doc(2000);
+    DynamicJsonDocument doc(MAX_JSON_SIZE);
 
     //create package exterior
     Serial.println(F("** Packaging **"));
@@ -27,7 +27,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     doc["id"]["instance"] = instanceNum;
     doc["Packet"]["Number"] = *packetNum;
 
-    // Get the contents of the JSON document
+    // Get the contents of the JSON document (i feel like this sucks)
     JsonArray contentsArray = doc["contents"];
     if(contentsArray.isNull())
         contentsArray = doc.createNestedArray("contents");
@@ -58,6 +58,33 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
         //
         
         //do the thing
+        char output[MAX_JSON_SIZE + 1];
+
+        // Write the Instance data that isn't included in the JSON packet
+        snprintf_P(output, MAX_JSON_SIZE, PSTR("%s,%i,"), deviceName, instanceNum);
+        myFile.print(output);
+        memset(output, '\0', MAX_JSON_SIZE); // Clear array
+
+        // If there is a key that contains timestamp data when need to include that separately 
+        if(doc.containsKey("timestamp")){
+            char utcArr[21];
+            memset(utcArr, '\0', 21);
+            strncpy(utcArr, doc["timestamp"]["time_utc"].as<const char*>(), 21);
+
+            // Format date with spaces when logging to SD
+            char *indexPointer = strchr(utcArr, 'Z');
+            if(indexPointer != nullptr){
+                utcArr[10] = ' ';
+                utcArr[indexPointer-utcArr] = '\0';
+            }
+
+            // Format the time stamp in the CSV file
+            strncat(output, utcArr, MAX_JSON_SIZE);
+            strncat(output, ",", MAX_JSON_SIZE);
+        }
+
+
+
 
     }
 }
