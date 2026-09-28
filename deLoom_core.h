@@ -15,14 +15,13 @@ void power_down();
 
 void power_up();
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName);
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum);
 
 void begin_serial(bool waitForSerial);
 
-void deLoom_initialize(char* serial_num);
+void deLoom_initialize(char* serialNum);
 
-void read_serial_num(char* serial_num);
-
+void read_serial_num(char* serialNum);
 
 void deLoom_package();
 

@@ -10,7 +10,7 @@ void power_up(){
     //power up the sensors
 }
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName){
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum){
     //DateTime currentTime = RTC_DS.now();
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
@@ -33,8 +33,10 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName){
 
         //if this is the first time opening the file, then need to add header
         if(myFile.available() <= 3){
-            write_headers(&myFile, &doc);
+            write_headers(&myFile, &doc, serialNum);
         }
+
+        //
         
         //do the thing
 
@@ -57,13 +59,13 @@ void begin_serial(bool waitForSerial){
     }
 }
 
-void deLoom_initialize(char* serial_num){
+void deLoom_initialize(char* serialNum){
     //do any initialization tasks that the sensors require
     //grab the serial num and put it in
-    read_serial_num(serial_num);
+    read_serial_num(serialNum);
 }
 
-void read_serial_num(char* serial_num){
+void read_serial_num(char* serialNum){
     char serial_no[33];
     // Serial numbers are made up of four words located at these specific registers (see datasheet)
 	uint32_t sn_words[4];
@@ -80,7 +82,7 @@ void read_serial_num(char* serial_num){
 	}
 
     // Copy the contents of the calculated char array into the member variable
-    strncpy(serial_num, serial_no, 33);
+    strncpy(serialNum, serial_no, 33);
 }
 
 void deLoom_package(){
