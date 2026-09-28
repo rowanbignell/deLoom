@@ -18,6 +18,8 @@ void write_header_to_file(const char* filename);
 
 void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum);
 
+void update_modified_date(File* myFile);
+
 void log_to_sd(const char* filename);
 
 void initialize_sd();

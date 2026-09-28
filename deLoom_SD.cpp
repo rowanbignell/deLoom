@@ -76,3 +76,8 @@ void sd_begin(SdFat* sd){
         Serial.println((F("** Successfully initialized SD card **")));
     }
 }
+
+void update_modified_date(File* myFile){
+    DateTime currentTime = RTC_DS.now();
+    myFile->timestamp(T_WRITE , currentTime.year(), currentTime.month(), currentTime.day(), currentTime.hour(), currentTime.minute(), currentTime.second());
+}

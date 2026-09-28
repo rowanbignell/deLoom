@@ -11,7 +11,6 @@ void power_up(){
 }
 
 void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum){
-    //DateTime currentTime = RTC_DS.now();
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
 
@@ -83,9 +82,29 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
             strncat(output, ",", MAX_JSON_SIZE);
         }
 
+        //module data
 
+        // Loop over each 
+        for(JsonVariant v : contentsArray) {
 
+            // Get all JSON keys  
+            for(JsonPair keyValue : v.as<JsonObject>()["data"].as<JsonObject>()){
+                strncat(output, keyValue.value().as<String>().c_str(), MAX_JSON_SIZE);
+                strncat(output, ",", MAX_JSON_SIZE);
+            }
+        }
 
+        // Write the matching data into the CSV file
+        myFile.println(output);
+
+        // Set the last modified date
+        update_modified_date(&myFile);
+
+        // Close the file
+        myFile.close();
+
+        // Inform the user that we have successfully written to the file
+        Serial.println("Successfully written to file.");
     }
 }
 
