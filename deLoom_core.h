@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <SdFat.h>
+#include <OPEnS_RTC.h>
+
 
 #define BAUD_RATE 115200        // Serial interface baud rate
 

@@ -11,6 +11,7 @@ void power_up(){
 }
 
 void deLoom_measure(bool display, SdFat* sd, char* deviceName){
+    //DateTime currentTime = RTC_DS.now();
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
 
@@ -30,7 +31,13 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName){
         File myFile;
         myFile = sd->open(deviceName, O_RDWR | O_CREAT | O_APPEND);
 
-        //etc
+        //if this is the first time opening the file, then need to add header
+        if(myFile.available() <= 3){
+            write_headers(&myFile, &doc);
+        }
+        
+        //do the thing
+
     }
 }
 

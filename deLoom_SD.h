@@ -3,6 +3,10 @@
 #include <SPI.h>
 #include <SdFat.h>
 #include <OPEnS_RTC.h>
+#include <ArduinoJson.h>
+#include <OPEnS_RTC.h>
+#include <deLoom_Hypnos.h>
+
 
 #include "deLoom_core.h"
 
@@ -11,6 +15,8 @@
 bool write_line_to_file(const char* filename, const char* content);
 
 void write_header_to_file(const char* filename);
+
+void write_headers(File* myFile, DynamicJsonDocument* doc);
 
 void log_to_sd(const char* filename);
 

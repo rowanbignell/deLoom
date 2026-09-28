@@ -16,6 +16,14 @@ void initialize_sd(){
 
 }
 
+void write_headers(File* myFile, DynamicJsonDocument* doc){
+    DateTime currentTime = RTC_DS.now();
+
+    myFile->timestamp(T_CREATE, currentTime.year(), currentTime.month(), currentTime.day(), currentTime.hour(), currentTime.minute(), currentTime.second());
+
+}
+
+
 void sd_begin(SdFat* sd){
     digitalWrite(8, HIGH);  // Disable LoRa
 
