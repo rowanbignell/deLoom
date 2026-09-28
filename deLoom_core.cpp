@@ -10,7 +10,7 @@ void power_up(){
     //power up the sensors
 }
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum){
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum){
     //DateTime currentTime = RTC_DS.now();
     //pull measure data from the sensors
     Serial.println(F("Ran measure()"));
@@ -18,8 +18,27 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum){
     DynamicJsonDocument doc(2000);
 
     //create package exterior
+    Serial.println(F("** Packaging **"));
+    
+    // Clear the document so that we don't get null characters after too many updates
+    doc.clear();
+    doc[F("type")] = F("data");
+    doc["id"]["name"] = deviceName;
+    doc["id"]["instance"] = instanceNum;
+    doc["Packet"]["Number"] = *packetNum;
+
+    // Get the contents of the JSON document
+    JsonArray contentsArray = doc["contents"];
+    if(contentsArray.isNull())
+        contentsArray = doc.createNestedArray("contents");
+
+    // Add the packet number to the JSON document
+    //JsonObject json = get_data_object("Packet");
+    //json["Number"] = packetNum;
 
     //run measure on the submodules giving them the exterior
+
+    *packetNum++;
 
     //display?
     if (display){

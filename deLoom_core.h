@@ -15,7 +15,7 @@ void power_down();
 
 void power_up();
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum);
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum);
 
 void begin_serial(bool waitForSerial);
 
