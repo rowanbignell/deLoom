@@ -48,6 +48,8 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
     //log finished packet?
     if(enableSD){
+        Serial.println(F("** Writing to file... **"));
+
         char fileName[260];
         snprintf_P(fileName, 260, PSTR("%s%i.csv"), deviceName, instanceNum); 
 
@@ -59,10 +61,6 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
             if(myFile.available() <= 3){
                 write_headers(&myFile, &doc, serialNum, packetNum);
             }
-
-            //
-            
-            //do the thing
             char output[MAX_JSON_SIZE + 1];
 
             // Write the Instance data that isn't included in the JSON packet
@@ -72,19 +70,8 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
             // If there is a key that contains timestamp data when need to include that separately 
             if(doc.containsKey("timestamp")){
-                char utcArr[21];
-                memset(utcArr, '\0', 21);
-                strncpy(utcArr, doc["timestamp"]["time_utc"].as<const char*>(), 21);
-
-                // Format date with spaces when logging to SD
-                char *indexPointer = strchr(utcArr, 'Z');
-                if(indexPointer != nullptr){
-                    utcArr[10] = ' ';
-                    utcArr[indexPointer-utcArr] = '\0';
-                }
-
                 // Format the time stamp in the CSV file
-                strncat(output, utcArr, MAX_JSON_SIZE);
+                strncat(output, timestr, MAX_JSON_SIZE);
                 strncat(output, ",", MAX_JSON_SIZE);
             }
 
@@ -109,6 +96,12 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
             // Close the file
             myFile.close();
+
+            Serial.println(F("** Wrote packet to file **"));
+
+        } else {
+            Serial.println(F("** Failed to open file! **"));
+
         }
     }
 
