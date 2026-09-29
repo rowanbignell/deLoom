@@ -32,9 +32,9 @@ void setup() {
 }
 
 void loop() {
+  // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
+  sleep(&sd, 10, true);
+
   //measure from the sensors
   deLoom_measure(true, &sd, deviceName, serialNum, instanceNumber, &packetNumber);
-  
-  // Put the device into a deep sleep, operation HALTS here until the interrupt is triggered
-  sleep(&sd, 5, true);
 }

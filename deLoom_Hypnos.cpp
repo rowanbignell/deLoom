@@ -41,7 +41,8 @@ void post_sleep(SdFat* sd){
 
     //start the serial monitor
     begin_serial(true);
-
+    delay(50);
+    
     Serial.println((F("** Woke Up **")));
 
     // power on the devices
