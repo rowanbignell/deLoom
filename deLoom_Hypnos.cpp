@@ -208,6 +208,10 @@ void set_custom_time(){
     Serial.println(F("Custom Time Set."));
 }
 
+void getTimeAsString(char array[21]){
+    return dateTime_toString(RTC_DS.now(), array);
+}
+
 void dateTime_toString(DateTime time, char array[21]){
     // Formatted as: YYYY-MM-DDTHH:MM:SSZ
     snprintf_P(array, 21, PSTR("%04u-%02u-%02uT%02u:%02u:%02uZ"), time.year(), time.month(), time.day(), time.hour(), time.minute(), time.second());

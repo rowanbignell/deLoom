@@ -39,6 +39,7 @@ void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum, uint
     // If there is a key that contains timestamp data when need to include that separately 
     if(document.containsKey("timestamp")){
         strncat(header1, "timestamp,", 512);
+        strncat(header2, "timestamp,", 512);
     }
     
     // Get the contents containing the reset of the sensor data

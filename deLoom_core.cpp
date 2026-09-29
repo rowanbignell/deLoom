@@ -15,7 +15,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     DynamicJsonDocument doc(MAX_JSON_SIZE);
 
     //create package exterior
-    Serial.println(F("** Packaging **"));
+    Serial.println(F("** Pre-Packaging **"));
     
     // Clear the document so that we don't get null characters after too many updates
     doc.clear();
@@ -24,18 +24,19 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     doc["id"]["instance"] = instanceNum;
     doc["Packet"]["Number"] = *packetNum;
 
-    // Get the contents of the JSON document (i feel like this sucks)
+    // Get the contents of the JSON document (i feel like this sucks, but maybe it doesn't its probably just a pointer under the hood yeah?)
     JsonArray contentsArray = doc["contents"];
     if(contentsArray.isNull())
         contentsArray = doc.createNestedArray("contents");
 
-    // Add the packet number to the JSON document
-    //JsonObject json = get_data_object("Packet");
-    //json["Number"] = packetNum;
-
     // TODO:
     //run measure on the submodules giving them the exterior
     Serial.println(F("** Measuring **"));
+
+    //get the timestamp
+    char timestr[21];
+    getTimeAsString(timestr);
+    doc["timestamp"]["timestamp"] = timestr;
 
     //display?
     if (display){
@@ -108,10 +109,6 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
             // Close the file
             myFile.close();
-
-            // Inform the user that we have successfully written to the file
-            Serial.println("Successfully written to file.");
-
         }
     }
 

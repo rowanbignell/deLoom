@@ -29,6 +29,8 @@ void initializeRTC();
 */
 void dateTime_toString(DateTime time, char array[21]);
 
+void getTimeAsString(char array[21]);
+
 /**
  * Set a custom time on startup for the RTC to use
 */
