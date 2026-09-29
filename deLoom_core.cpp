@@ -37,9 +37,6 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     //run measure on the submodules giving them the exterior
     Serial.println(F("** Measuring **"));
 
-
-    *packetNum++;
-
     //display?
     if (display){
         //display finished packet
@@ -117,6 +114,10 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
         }
     }
+
+    //post-measure
+    ++*packetNum;
+
 }
 
 void begin_serial(bool waitForSerial){
