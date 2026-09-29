@@ -12,8 +12,6 @@ void power_up(){
 
 void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum){
     //pull measure data from the sensors
-    Serial.println(F("Ran measure()"));
-
     DynamicJsonDocument doc(MAX_JSON_SIZE);
 
     //create package exterior
@@ -37,6 +35,8 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
     // TODO:
     //run measure on the submodules giving them the exterior
+    Serial.println(F("** Measuring **"));
+
 
     *packetNum++;
 
@@ -50,65 +50,72 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
     //log finished packet?
     if(enableSD){
+        char fileName[260];
+        snprintf_P(fileName, 260, PSTR("%s.csv"), deviceName); 
+
         File myFile;
-        myFile = sd->open(deviceName, O_RDWR | O_CREAT | O_APPEND);
+        myFile = sd->open(fileName, O_RDWR | O_CREAT | O_APPEND);
 
-        //if this is the first time opening the file, then need to add header
-        if(myFile.available() <= 3){
-            write_headers(&myFile, &doc, serialNum);
-        }
-
-        //
-        
-        //do the thing
-        char output[MAX_JSON_SIZE + 1];
-
-        // Write the Instance data that isn't included in the JSON packet
-        snprintf_P(output, MAX_JSON_SIZE, PSTR("%s,%i,"), deviceName, instanceNum);
-        myFile.print(output);
-        memset(output, '\0', MAX_JSON_SIZE); // Clear array
-
-        // If there is a key that contains timestamp data when need to include that separately 
-        if(doc.containsKey("timestamp")){
-            char utcArr[21];
-            memset(utcArr, '\0', 21);
-            strncpy(utcArr, doc["timestamp"]["time_utc"].as<const char*>(), 21);
-
-            // Format date with spaces when logging to SD
-            char *indexPointer = strchr(utcArr, 'Z');
-            if(indexPointer != nullptr){
-                utcArr[10] = ' ';
-                utcArr[indexPointer-utcArr] = '\0';
+        if(myFile){
+            //if this is the first time opening the file, then need to add header
+            if(myFile.available() <= 3){
+                write_headers(&myFile, &doc, serialNum, packetNum);
             }
 
-            // Format the time stamp in the CSV file
-            strncat(output, utcArr, MAX_JSON_SIZE);
-            strncat(output, ",", MAX_JSON_SIZE);
-        }
+            //
+            
+            //do the thing
+            char output[MAX_JSON_SIZE + 1];
 
-        //module data
+            // Write the Instance data that isn't included in the JSON packet
+            snprintf_P(output, MAX_JSON_SIZE, PSTR("%s,%i,%i,"), deviceName, instanceNum, *packetNum);
+            myFile.print(output);
+            memset(output, '\0', MAX_JSON_SIZE); // Clear array
 
-        // Loop over each 
-        for(JsonVariant v : contentsArray) {
+            // If there is a key that contains timestamp data when need to include that separately 
+            if(doc.containsKey("timestamp")){
+                char utcArr[21];
+                memset(utcArr, '\0', 21);
+                strncpy(utcArr, doc["timestamp"]["time_utc"].as<const char*>(), 21);
 
-            // Get all JSON keys  
-            for(JsonPair keyValue : v.as<JsonObject>()["data"].as<JsonObject>()){
-                strncat(output, keyValue.value().as<String>().c_str(), MAX_JSON_SIZE);
+                // Format date with spaces when logging to SD
+                char *indexPointer = strchr(utcArr, 'Z');
+                if(indexPointer != nullptr){
+                    utcArr[10] = ' ';
+                    utcArr[indexPointer-utcArr] = '\0';
+                }
+
+                // Format the time stamp in the CSV file
+                strncat(output, utcArr, MAX_JSON_SIZE);
                 strncat(output, ",", MAX_JSON_SIZE);
             }
+
+
+            //module data
+
+            // Loop over each 
+            for(JsonVariant v : contentsArray) {
+
+                // Get all JSON keys  
+                for(JsonPair keyValue : v.as<JsonObject>()["data"].as<JsonObject>()){
+                    strncat(output, keyValue.value().as<String>().c_str(), MAX_JSON_SIZE);
+                    strncat(output, ",", MAX_JSON_SIZE);
+                }
+            }
+
+            // Write the matching data into the CSV file
+            myFile.println(output);
+
+            // Set the last modified date
+            update_modified_date(&myFile);
+
+            // Close the file
+            myFile.close();
+
+            // Inform the user that we have successfully written to the file
+            Serial.println("Successfully written to file.");
+
         }
-
-        // Write the matching data into the CSV file
-        myFile.println(output);
-
-        // Set the last modified date
-        update_modified_date(&myFile);
-
-        // Close the file
-        myFile.close();
-
-        // Inform the user that we have successfully written to the file
-        Serial.println("Successfully written to file.");
     }
 }
 

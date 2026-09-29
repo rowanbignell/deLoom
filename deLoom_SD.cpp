@@ -16,7 +16,7 @@ void initialize_sd(){
 
 }
 
-void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum){
+void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum, uint32_t* packetNum){
     DateTime currentTime = RTC_DS.now();
     //set the created timestamp
     myFile->timestamp(T_CREATE, currentTime.year(), currentTime.month(), currentTime.day(), currentTime.hour(), currentTime.minute(), currentTime.second());
@@ -33,12 +33,12 @@ void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum){
     memset(header2, '\0', 512);
 
     JsonObject document = doc->as<JsonObject>();
-    strncat(header1, "ID,,", 512);
-    strncat(header2, "name,instance,", 512);
+    strncat(header1, "ID,,packet,", 512);
+    strncat(header2, "name,instance,number,", 512);
     
     // If there is a key that contains timestamp data when need to include that separately 
     if(document.containsKey("timestamp")){
-        strncat(header1, "timestamp,,", 512);
+        strncat(header1, "timestamp,", 512);
     }
     
     // Get the contents containing the reset of the sensor data

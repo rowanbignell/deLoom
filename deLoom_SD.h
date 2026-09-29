@@ -16,7 +16,7 @@ bool write_line_to_file(const char* filename, const char* content);
 
 void write_header_to_file(const char* filename);
 
-void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum);
+void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum, uint32_t* packetNum);
 
 void update_modified_date(File* myFile);
 
