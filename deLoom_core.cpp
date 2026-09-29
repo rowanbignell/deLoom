@@ -51,7 +51,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     //log finished packet?
     if(enableSD){
         char fileName[260];
-        snprintf_P(fileName, 260, PSTR("%s.csv"), deviceName); 
+        snprintf_P(fileName, 260, PSTR("%s%i.csv"), deviceName, instanceNum); 
 
         File myFile;
         myFile = sd->open(fileName, O_RDWR | O_CREAT | O_APPEND);
