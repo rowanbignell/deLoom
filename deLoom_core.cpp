@@ -10,35 +10,104 @@ void power_up(){
     //power up the sensors
 }
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName){
-    //DateTime currentTime = RTC_DS.now();
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum){
     //pull measure data from the sensors
-    Serial.println(F("Ran measure()"));
-
-    DynamicJsonDocument doc(2000);
+    DynamicJsonDocument doc(MAX_JSON_SIZE);
 
     //create package exterior
+    Serial.println(F("** Pre-Packaging **"));
+    
+    // Clear the document so that we don't get null characters after too many updates
+    doc.clear();
+    doc[F("type")] = F("data");
+    doc["id"]["name"] = deviceName;
+    doc["id"]["instance"] = instanceNum;
+    doc["Packet"]["Number"] = *packetNum;
 
+    // Get the contents of the JSON document (i feel like this sucks, but maybe it doesn't its probably just a pointer under the hood yeah?)
+    JsonArray contentsArray = doc["contents"];
+    if(contentsArray.isNull())
+        contentsArray = doc.createNestedArray("contents");
+
+    // TODO:
     //run measure on the submodules giving them the exterior
+    Serial.println(F("** Measuring **"));
+
+    //get the timestamp
+    char timestr[21];
+    getTimeAsString(timestr);
+    doc["timestamp"]["timestamp"] = timestr;
 
     //display?
     if (display){
         //display finished packet
+        char jsonStr[MAX_JSON_SIZE];
+        serializeJsonPretty(doc, jsonStr, MAX_JSON_SIZE);
+        Serial.println(jsonStr);
     }
 
     //log finished packet?
     if(enableSD){
+        Serial.println(F("** Writing to file... **"));
+
+        char fileName[260];
+        snprintf_P(fileName, 260, PSTR("%s%i.csv"), deviceName, instanceNum); 
+
         File myFile;
-        myFile = sd->open(deviceName, O_RDWR | O_CREAT | O_APPEND);
+        myFile = sd->open(fileName, O_RDWR | O_CREAT | O_APPEND);
 
-        //if this is the first time opening the file, then need to add header
-        if(myFile.available() <= 3){
-            write_headers(&myFile, &doc);
+        if(myFile){
+            //if this is the first time opening the file, then need to add header
+            if(myFile.available() <= 3){
+                write_headers(&myFile, &doc, serialNum, packetNum);
+            }
+            char output[MAX_JSON_SIZE + 1];
+
+            // Write the Instance data that isn't included in the JSON packet
+            snprintf_P(output, MAX_JSON_SIZE, PSTR("%s,%i,%i,"), deviceName, instanceNum, *packetNum);
+            myFile.print(output);
+            memset(output, '\0', MAX_JSON_SIZE); // Clear array
+
+            // If there is a key that contains timestamp data when need to include that separately 
+            if(doc.containsKey("timestamp")){
+                // Format the time stamp in the CSV file
+                strncat(output, timestr, MAX_JSON_SIZE);
+                strncat(output, ",", MAX_JSON_SIZE);
+            }
+
+
+            //module data
+
+            // Loop over each 
+            for(JsonVariant v : contentsArray) {
+
+                // Get all JSON keys  
+                for(JsonPair keyValue : v.as<JsonObject>()["data"].as<JsonObject>()){
+                    strncat(output, keyValue.value().as<String>().c_str(), MAX_JSON_SIZE);
+                    strncat(output, ",", MAX_JSON_SIZE);
+                }
+            }
+
+            // Write the matching data into the CSV file
+            myFile.println(output);
+
+            // Set the last modified date
+            update_modified_date(&myFile);
+
+            // Close the file
+            myFile.close();
+
+            Serial.println(F("** Wrote packet to file **"));
+
+        } else {
+            Serial.println(F("** Failed to open file! **"));
+
         }
-        
-        //do the thing
-
     }
+
+    //post-measure
+    ++*packetNum;
+
 }
 
 void begin_serial(bool waitForSerial){
@@ -57,13 +126,13 @@ void begin_serial(bool waitForSerial){
     }
 }
 
-void deLoom_initialize(char* serial_num){
+void deLoom_initialize(char* serialNum){
     //do any initialization tasks that the sensors require
     //grab the serial num and put it in
-    read_serial_num(serial_num);
+    read_serial_num(serialNum);
 }
 
-void read_serial_num(char* serial_num){
+void read_serial_num(char* serialNum){
     char serial_no[33];
     // Serial numbers are made up of four words located at these specific registers (see datasheet)
 	uint32_t sn_words[4];
@@ -80,7 +149,7 @@ void read_serial_num(char* serial_num){
 	}
 
     // Copy the contents of the calculated char array into the member variable
-    strncpy(serial_num, serial_no, 33);
+    strncpy(serialNum, serial_no, 33);
 }
 
 void deLoom_package(){
