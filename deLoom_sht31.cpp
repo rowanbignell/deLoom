@@ -9,9 +9,7 @@ void SHT31_init(){
     }
 }
 
-void SHT31_measure(JsonObject contentsObject){
-    // Pull the data from the sensor
-    contentsObject
-    float temp = sht.readTemperature();
-    float humid = sht.readHumidity();    
+void SHT31_measure(JsonObject contentsArray){
+    contentsObject["sht31"]["Temperature_C"] = sht.readTemperature();
+    contentsObject["sht31"]["Humidity_%RH"] = sht.readHumidity();
 }

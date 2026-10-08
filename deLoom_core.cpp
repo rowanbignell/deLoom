@@ -1,6 +1,7 @@
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
+#include <deLoom_sht31.h>
 
 void power_down(){
     //power down the sensors
@@ -25,13 +26,15 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     doc["Packet"]["Number"] = *packetNum;
 
     // Get the contents of the JSON document (i feel like this sucks, but maybe it doesn't its probably just a pointer under the hood yeah?)
-    JsonArray contentsArray = doc["contents"];
-    if(contentsArray.isNull())
-        contentsArray = doc.createNestedArray("contents");
+    JsonArray contentsObject = doc["contents"];
+    if(contentsObject.isNull())
+        contentsObject = doc.createNestedArray("contents");
 
     // TODO:
     //run measure on the submodules giving them the exterior
     Serial.println(F("** Measuring **"));
+
+    sht31_measure(contentsObject);
 
     //get the timestamp
     char timestr[21];
@@ -78,6 +81,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
             //module data
 
+            JsonArray contentsArray = doc["contents"];
             // Loop over each 
             for(JsonVariant v : contentsArray) {
 
