@@ -8,4 +8,4 @@
 
 void SHT31_init();
 
-void SHT31_measure(JsonArray contentsArray);
+void SHT31_measure(JsonArray contentsObject);
