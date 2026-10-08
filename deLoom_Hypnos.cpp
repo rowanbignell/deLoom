@@ -41,7 +41,8 @@ void post_sleep(SdFat* sd){
 
     //start the serial monitor
     begin_serial(true);
-
+    delay(50);
+    
     Serial.println((F("** Woke Up **")));
 
     // power on the devices
@@ -206,6 +207,10 @@ void set_custom_time(){
 
     // Output
     Serial.println(F("Custom Time Set."));
+}
+
+void getTimeAsString(char array[21]){
+    return dateTime_toString(RTC_DS.now(), array);
 }
 
 void dateTime_toString(DateTime time, char array[21]){
