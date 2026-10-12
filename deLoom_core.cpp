@@ -1,7 +1,7 @@
 #include <deLoom_core.h>
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
-#include <deLoom_sht31.h>
+#include <deLoom_SHT31.h>
 
 void power_down(){
     //power down the sensors
@@ -11,7 +11,7 @@ void power_up(){
     //power up the sensors
 }
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum){
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum, Adafruit_SHT31* sht){
     //pull measure data from the sensors
     DynamicJsonDocument doc(MAX_JSON_SIZE);
 
@@ -34,7 +34,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     //run measure on the submodules giving them the exterior
     Serial.println(F("** Measuring **"));
 
-    sht31_measure(contentsObject);
+    SHT31_measure(contentsObject, sht);
 
     //get the timestamp
     char timestr[21];

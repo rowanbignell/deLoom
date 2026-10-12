@@ -9,7 +9,7 @@ void SHT31_init(){
     }
 }
 
-void SHT31_measure(JsonObject contentsArray){
-    contentsObject["sht31"]["Temperature_C"] = sht.readTemperature();
-    contentsObject["sht31"]["Humidity_%RH"] = sht.readHumidity();
+void SHT31_measure(JsonObject contentsArray, Adafruit_SHT31* sht){
+    contentsObject["sht31"]["Temperature_C"] = sht->readTemperature();
+    contentsObject["sht31"]["Humidity_%RH"] = sht->readHumidity();
 }

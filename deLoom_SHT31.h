@@ -8,4 +8,4 @@
 
 void SHT31_init();
 
-void SHT31_measure(JsonArray contentsObject);
+void SHT31_measure(JsonArray contentsObject, Adafruit_SHT31* sht);
