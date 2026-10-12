@@ -7,7 +7,7 @@
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
 #include <SdFat.h>
-#include <deLoom_sht31.h>
+#include <deLoom_SHT31.h>
 
 
 char deviceName[100] = "Test";                                // Name of the device
@@ -15,6 +15,8 @@ uint32_t instanceNumber = 1;                                // Instance number o
 uint32_t packetNumber = 1;                              // Tracks the current packet number
 char serialNum[33];
 SdFat sd;
+
+Adafruit_SHT31 sht;
 
 
 void setup() {
@@ -30,6 +32,8 @@ void setup() {
   
   // initalize the hypnos
   hypnos_init();
+
+  SHT31_init(&sht);
 }
 
 void loop() {
@@ -37,5 +41,5 @@ void loop() {
   sleep(&sd, 10, true);
 
   //measure from the sensors
-  deLoom_measure(true, &sd, deviceName, serialNum, instanceNumber, &packetNumber);
+  deLoom_measure(true, &sd, deviceName, serialNum, instanceNumber, &packetNumber, &sht);
 }
