@@ -1,7 +1,7 @@
 #include "deLoom_SHT31.h"
 
-void SHT31_init(){
-    if(!sht.begin(SHT31_address)){
+void SHT31_init(Adafruit_SHT31* sht){
+    if(!sht->begin(SHT31_address)){
         Serial.println(F("Failed to initialize SHT31! Check connections and try again..."));
     }
     else{
@@ -9,7 +9,7 @@ void SHT31_init(){
     }
 }
 
-void SHT31_measure(JsonObject contentsArray, Adafruit_SHT31* sht){
+void SHT31_measure(JsonObject contentsObject, Adafruit_SHT31* sht){
     contentsObject["sht31"]["Temperature_C"] = sht->readTemperature();
     contentsObject["sht31"]["Humidity_%RH"] = sht->readHumidity();
 }

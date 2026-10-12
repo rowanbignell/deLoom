@@ -26,9 +26,9 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     doc["Packet"]["Number"] = *packetNum;
 
     // Get the contents of the JSON document (i feel like this sucks, but maybe it doesn't its probably just a pointer under the hood yeah?)
-    JsonArray contentsObject = doc["contents"];
+    JsonObject contentsObject = doc["contents"];
     if(contentsObject.isNull())
-        contentsObject = doc.createNestedArray("contents");
+        contentsObject = doc.createNestedObject("contents");
 
     // TODO:
     //run measure on the submodules giving them the exterior

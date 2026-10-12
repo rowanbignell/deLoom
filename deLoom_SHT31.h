@@ -6,6 +6,6 @@
 
 // does not need to do power up or power down function stuff
 
-void SHT31_init();
+void SHT31_init(Adafruit_SHT31* sht);
 
-void SHT31_measure(JsonArray contentsObject, Adafruit_SHT31* sht);
+void SHT31_measure(JsonObject contentsObject, Adafruit_SHT31* sht);
