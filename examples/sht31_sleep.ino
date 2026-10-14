@@ -10,7 +10,7 @@
 #include <deLoom_SHT31.h>
 
 
-char deviceName[100] = "Test";                                // Name of the device
+char deviceName[100] = "Test_sht31";                                // Name of the device
 uint32_t instanceNumber = 1;                                // Instance number of the device
 uint32_t packetNumber = 1;                              // Tracks the current packet number
 char serialNum[33];
