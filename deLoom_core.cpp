@@ -81,12 +81,10 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
 
             //module data
 
-            JsonArray contentsArray = doc["contents"];
             // Loop over each 
-            for(JsonVariant v : contentsArray) {
-
+            for(JsonPair v : contentsObject) {
                 // Get all JSON keys  
-                for(JsonPair keyValue : v.as<JsonObject>()["data"].as<JsonObject>()){
+                for(JsonPair keyValue : v.value().as<JsonObject>()){
                     strncat(output, keyValue.value().as<String>().c_str(), MAX_JSON_SIZE);
                     strncat(output, ",", MAX_JSON_SIZE);
                 }

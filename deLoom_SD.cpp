@@ -43,15 +43,15 @@ void write_headers(File* myFile, DynamicJsonDocument* doc, char* serialNum, uint
     }
     
     // Get the contents containing the reset of the sensor data
-    JsonArray contentsArray = document["contents"].as<JsonArray>();
+    JsonObject contentsObject = document["contents"];
 
     // Loop over each 
-    for(JsonVariant v : contentsArray) {
+    for(JsonPair v : contentsObject) {
         // Get the module name
-        strncat(header1, v.as<JsonObject>()["module"].as<const char*>(), 512);
+        strncat(header1, v.key().c_str(), 512);
 
         // Get all JSON keys  
-        for(JsonPair keyValue : v.as<JsonObject>()["data"].as<JsonObject>()){
+        for(JsonPair keyValue : v.value().as<JsonObject>()){
             strncat(header2, keyValue.key().c_str(), 512);
             strncat(header2, ",", 512);
             strncat(header1, ",", 512);
