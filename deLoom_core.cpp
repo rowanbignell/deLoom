@@ -11,7 +11,8 @@ void power_up(){
     //power up the sensors
 }
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum, Adafruit_SHT31* sht){
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum, 
+    Adafruit_SHT31* sht, SensirionI2cSen66* sen66){
     //pull measure data from the sensors
     DynamicJsonDocument doc(MAX_JSON_SIZE);
 
@@ -35,6 +36,7 @@ void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, 
     Serial.println(F("** Measuring **"));
 
     SHT31_measure(contentsObject, sht);
+    SEN66_measure(contentsObject, sen66);
 
     //get the timestamp
     char timestr[21];

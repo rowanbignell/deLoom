@@ -15,7 +15,8 @@ void power_down();
 
 void power_up();
 
-void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum, Adafruit_SHT31* sht);
+void deLoom_measure(bool display, SdFat* sd, char* deviceName, char* serialNum, uint32_t instanceNum, uint32_t* packetNum, 
+    Adafruit_SHT31* sht, SensirionI2cSen66* sen66);
 
 void begin_serial(bool waitForSerial);
 
