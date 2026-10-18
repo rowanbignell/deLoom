@@ -19,10 +19,19 @@ void SEN66_init(SensirionI2cSen66* sen66){
         Serial.println(F("Started SEN66!"));
         delay(5000);
     }
-
-
 }
 
 void SEN66_measure(JsonObject contentsObject, SensirionI2cSen66* sen66){
+    //setup temp variables
 
+    //loop to read values and put it in the object
+
+        //check if ready
+            //put it in temp
+            // filter temp
+                // add to object
+                // iterate
+    //divide by num samples
+
+    //if valid samples wasn't iterated, print error
 }
