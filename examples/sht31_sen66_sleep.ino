@@ -36,6 +36,7 @@ void setup() {
   hypnos_init();
 
   SHT31_init(&sht);
+  SEN66_init(&sen66);
 }
 
 void loop() {
