@@ -49,15 +49,15 @@ void SEN66_measure(JsonObject contentsObject, SensirionI2cSen66* sen66){
             if (!sen66->readMeasuredValues(tmpPm1p0, tmpPm2p5, tmpPm4p0, tmpPm10p0, tmpHum,
                                              tmpTemp, tmpVoc, tmpNox, tmpCo2) && tmpPm2p5 < 6000.0 && tmpCo2 < 60000) {
                 // add to object
-                sen66_obj["PM1_0"] = sen66_obj["PM1_0"] + tmpPm1p0;
-                sen66_obj["PM2_5"] = sen66_obj["PM2_5"] + tmpPm2p5;
-                sen66_obj["PM4_0"] = sen66_obj["PM4_0"] + tmpPm4p0;
-                sen66_obj["PM10_0"] = sen66_obj["PM10_0"] + tmpPm10p0;
-                sen66_obj["AmbientHumidity"] = sen66_obj["AmbientHumidity"] + tmpHum;
-                sen66_obj["AmbientTemperature"] = sen66_obj["AmbientTemperature"] + tmpTemp;
-                sen66_obj["VocIndex"] = sen66_obj["VocIndex"] + tmpVoc;
-                sen66_obj["NoxIndex"] = sen66_obj["NoxIndex"] + tmpNox;
-                sen66_obj["C02"] = sen66_obj["C02"] + tmpCo2;
+                sen66_obj["PM1_0"] = sen66_obj["PM1_0"].as<float>() + tmpPm1p0;
+                sen66_obj["PM2_5"] = sen66_obj["PM2_5"].as<float>() + tmpPm2p5;
+                sen66_obj["PM4_0"] = sen66_obj["PM4_0"].as<float>() + tmpPm4p0;
+                sen66_obj["PM10_0"] = sen66_obj["PM10_0"].as<float>() + tmpPm10p0;
+                sen66_obj["AmbientHumidity"] = sen66_obj["AmbientHumidity"].as<float>() + tmpHum;
+                sen66_obj["AmbientTemperature"] = sen66_obj["AmbientTemperature"].as<float>() + tmpTemp;
+                sen66_obj["VocIndex"] = sen66_obj["VocIndex"].as<float>() + tmpVoc;
+                sen66_obj["NoxIndex"] = sen66_obj["NoxIndex"].as<float>() + tmpNox;
+                sen66_obj["C02"] = sen66_obj["C02"].as<float>() + tmpCo2;
 
                 // iterate
                 validSamples++;
@@ -65,15 +65,15 @@ void SEN66_measure(JsonObject contentsObject, SensirionI2cSen66* sen66){
         }
     }
     //divide by num samples
-    sen66_obj["PM1_0"] = sen66_obj["PM1_0"] / PM_AVERAGE_COUNT;
-    sen66_obj["PM2_5"] = sen66_obj["PM2_5"] / PM_AVERAGE_COUNT;
-    sen66_obj["PM4_0"] = sen66_obj["PM4_0"] / PM_AVERAGE_COUNT;
-    sen66_obj["PM10_0"] = sen66_obj["PM10_0"] / PM_AVERAGE_COUNT;
-    sen66_obj["AmbientHumidity"] = sen66_obj["AmbientHumidity"] / PM_AVERAGE_COUNT;
-    sen66_obj["AmbientTemperature"] = sen66_obj["AmbientTemperature"] / PM_AVERAGE_COUNT;
-    sen66_obj["VocIndex"] = sen66_obj["VocIndex"] / PM_AVERAGE_COUNT;
-    sen66_obj["NoxIndex"] = sen66_obj["NoxIndex"] / PM_AVERAGE_COUNT;
-    sen66_obj["C02"] = sen66_obj["C02"] / PM_AVERAGE_COUNT;
+    sen66_obj["PM1_0"] = sen66_obj["PM1_0"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["PM2_5"] = sen66_obj["PM2_5"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["PM4_0"] = sen66_obj["PM4_0"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["PM10_0"] = sen66_obj["PM10_0"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["AmbientHumidity"] = sen66_obj["AmbientHumidity"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["AmbientTemperature"] = sen66_obj["AmbientTemperature"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["VocIndex"] = sen66_obj["VocIndex"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["NoxIndex"] = sen66_obj["NoxIndex"].as<float>() / PM_AVERAGE_COUNT;
+    sen66_obj["C02"] = sen66_obj["C02"].as<float>() / PM_AVERAGE_COUNT;
 
     //if valid samples wasn't iterated, print error
     if(!validSamples){
