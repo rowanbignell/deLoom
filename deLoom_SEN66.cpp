@@ -13,7 +13,7 @@ void SEN66_init(SensirionI2cSen66* sen66){
     }
     delay(1200);
 
-    if(sen66->startContinuousMeasurement(startContinuousMeasurement)){
+    if(sen66->startContinuousMeasurement()){
         Serial.println(F("Failed to start SEN66."));
     } else {
         Serial.println(F("Started SEN66!"));
@@ -24,7 +24,7 @@ void SEN66_init(SensirionI2cSen66* sen66){
 void SEN66_measure(JsonObject contentsObject, SensirionI2cSen66* sen66){
     Serial.println(F("Attempting to measure SEN66..."));
 
-    JsonObject sen66_obj = conentsObject["sen66"].as<JsonObject>();
+    JsonObject sen66_obj = contentsObject["sen66"].as<JsonObject>();
     //setup temp variables
     float tmpPm1p0, tmpPm2p5, tmpPm4p0, tmpPm10p0;
     float tmpHum, tmpTemp, tmpVoc, tmpNox;
