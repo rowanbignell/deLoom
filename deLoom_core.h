@@ -7,6 +7,8 @@
 #include <string.h>
 #include <SdFat.h>
 #include <Adafruit_SHT31.h>
+#include "SensirionI2cSen66.h"
+
 
 #define BAUD_RATE 115200        // Serial interface baud rate
 #define MAX_JSON_SIZE 2000

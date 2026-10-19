@@ -6,7 +6,7 @@ void SEN66_init(SensirionI2cSen66* sen66){
     Wire.begin();
     sen66->begin(Wire, SEN66_I2C_ADDRESS);
 
-    if (sen66.deviceReset()){
+    if (sen66->deviceReset()){
         Serial.println(F("Failed to reset SEN66."));
     } else {
         Serial.println(F("Successfully reset SEN66!"));

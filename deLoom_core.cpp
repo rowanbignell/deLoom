@@ -2,6 +2,8 @@
 #include <deLoom_Hypnos.h>
 #include <deLoom_SD.h>
 #include <deLoom_SHT31.h>
+#include <deLoom_SEN66.h>
+
 
 void power_down(){
     //power down the sensors
